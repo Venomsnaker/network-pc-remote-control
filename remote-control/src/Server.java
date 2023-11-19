@@ -16,15 +16,15 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 public class Server {
     public static void main(String[] args) {
         try {
-            try {
-                GlobalScreen.registerNativeHook();
-            }
-            catch (NativeHookException ex) {
-                System.err.println("There was a problem registering the native hook.");
-                System.err.println(ex.getMessage());
-
-                System.exit(1);
-            }
+//            try {
+//                GlobalScreen.registerNativeHook();
+//            }
+//            catch (NativeHookException ex) {
+//                System.err.println("There was a problem registering the native hook.");
+//                System.err.println(ex.getMessage());
+//
+//                System.exit(1);
+//            }
 
             ServerSocket serverSocket = new ServerSocket(5000);
             while (true) {
@@ -64,19 +64,19 @@ public class Server {
                     writer.println("All shutdown commands have been cancelled.");
                     writer.flush();
 
-                } else if (request.equals("screenshot")) {
-                    BufferedImage screenshot = new Robot().createScreenCapture(
-                            new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())
-                    );
-
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    ImageIO.write(screenshot, "png", baos);
-                    byte[] imageBytes = baos.toByteArray();
-                    baos.close();
-
-                    writer.println(imageBytes.length);
-                    writer.flush();
-                    socket.getOutputStream().write(imageBytes);
+//                } else if (request.equals("screenshot")) {
+//                    BufferedImage screenshot = new Robot().createScreenCapture(
+//                            new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())
+//                    );
+//
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    ImageIO.write(screenshot, "png", baos);
+//                    byte[] imageBytes = baos.toByteArray();
+//                    baos.close();
+//
+//                    writer.println(imageBytes.length);
+//                    writer.flush();
+//                    socket.getOutputStream().write(imageBytes);
 
                 } else if (request.startsWith("collect-")) {
                     String filePath = request.substring(8);
