@@ -66,14 +66,16 @@ public class Client {
 
                         int fileSize = Integer.parseInt(reader.readLine());
                         byte[] fileBytes = new byte[fileSize];
-
                         int totalBytesRead = 0;
                         int bytesReadThisTime;
-                        while ((bytesReadThisTime = socket.getInputStream().read(fileBytes, totalBytesRead, fileBytes.length - totalBytesRead)) > 0) {
-                            totalBytesRead += bytesReadThisTime;
-                            if (totalBytesRead == fileSize) {
+
+                        while (totalBytesRead < fileSize) {
+                            bytesReadThisTime = socket.getInputStream().read(fileBytes, totalBytesRead, fileBytes.length - totalBytesRead);
+                            if (bytesReadThisTime == -1) {
+                                System.out.println("End of stream reached before all bytes were read.");
                                 break;
                             }
+                            totalBytesRead += bytesReadThisTime;
                         }
 
                         if (totalBytesRead == fileSize) {
@@ -144,13 +146,13 @@ public class Client {
 
                     case 9:
                         System.out.println("Enter the name of the app you want to stop: ");
-                        String appName = sc.nextLine();
+                        String appName_stop = sc.nextLine();
                     
-                        writer.println("stop-app-" + appName);
+                        writer.println("stop-app-" + appName_stop);
                         writer.flush();
                     
-                        String response = reader.readLine();
-                        System.out.println(response);
+                        String response_code = reader.readLine();
+                        System.out.println(response_code);
                         break;
 
                     case 10:
@@ -160,25 +162,27 @@ public class Client {
                     
                         int screenshotSize = Integer.parseInt(reader.readLine());
                         byte[] screenshotBytes = new byte[screenshotSize];
-                    
-                        int totalBytesReadScreenshot = 0;
-                        int bytesReadThisTimeScreenshot;
-                        while ((bytesReadThisTimeScreenshot = socket.getInputStream().read(screenshotBytes, totalBytesReadScreenshot, screenshotBytes.length - totalBytesReadScreenshot)) > 0) {
-                            totalBytesReadScreenshot += bytesReadThisTimeScreenshot;
-                            if (totalBytesReadScreenshot == screenshotSize) {
+                        totalBytesRead = 0;
+
+                        while (totalBytesRead < screenshotSize) {
+                            bytesReadThisTime = socket.getInputStream().read(screenshotBytes, totalBytesRead, screenshotBytes.length - totalBytesRead);
+                            if (bytesReadThisTime == -1) {
+                                System.out.println("End of stream reached before all bytes were read.");
                                 break;
                             }
+                            totalBytesRead += bytesReadThisTime;
                         }
-                    
-                        if (totalBytesReadScreenshot == screenshotSize) {
+
+                        if (totalBytesRead >= screenshotSize) {
                             String screenshotAddress = Paths.get("").toAbsolutePath().toString() + "/";
                             System.out.println(screenshotAddress);
                             System.out.println("Enter screenshot file name: ");
                             String screenshotFileName = sc.nextLine();
-                    
+
+                            Path screenshotAddressChecker = Paths.get(screenshotAddress);
                             Path screenshotFilePath = Paths.get(screenshotAddress + screenshotFileName);
                     
-                            if (Files.isWritable(screenshotFilePath.getParent())) {
+                            if (Files.isDirectory(screenshotAddressChecker.getParent()) && Files.isWritable(screenshotAddressChecker)) {
                                 Files.write(screenshotFilePath, screenshotBytes);
                                 System.out.println("Server screenshot saved to: " + screenshotFilePath);
                             } else {

@@ -47,7 +47,6 @@ public class Server implements NativeKeyListener{
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
 
-
             while (true) {
                 String request = reader.readLine();
 
@@ -111,45 +110,48 @@ public class Server implements NativeKeyListener{
                     writer.println(keyLoggingResult);
                     writer.flush();
                     
-                }else if (request.equals("list-apps")) {
-                    List<String> appsList = getAppsList();
-                    writer.println(appsList);
-                    writer.flush();
-                    
-                }else if (request.startsWith("start-app-")) {
-                    String appName = request.substring(10);
-                    boolean success = startApp(appName);
-                    writer.println(success);
-                    writer.flush();
-                    
-                }else if (request.startsWith("stop-app-")) {
-                    String appName = request.substring(10);
-                    boolean success = stopApp(appName);
-                    writer.println(success);
-                    writer.flush();
-                    
+//                }else if (request.equals("list-apps")) {
+//                    List<String> appsList = getAppsList();
+//                    writer.println(appsList);
+//                    writer.flush();
+//
+//                }else if (request.startsWith("start-app-")) {
+//                    String appName = request.substring(10);
+//                    boolean success = startApp(appName);
+//                    writer.println(success);
+//                    writer.flush();
+//
+//                }else if (request.startsWith("stop-app-")) {
+//                    String appName = request.substring(10);
+//                    boolean success = stopApp(appName);
+//                    writer.println(success);
+//                    writer.flush();
+
                 } else if (request.equals("get-screenshot")) {
                     try {
                         Robot robot = new Robot();
                         Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
                         BufferedImage screenshot = robot.createScreenCapture(screenRect);
-                
+
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ImageIO.write(screenshot, "png", baos);
                         byte[] screenshotBytes = baos.toByteArray();
-                
+                        baos.close();
+
                         writer.println(screenshotBytes.length);
                         writer.flush();
                         socket.getOutputStream().write(screenshotBytes);
-                
+
                     } catch (AWTException | IOException e) {
                         e.printStackTrace();
                         writer.println("Error capturing screenshot.");
                         writer.flush();
                     }
                 }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
+
