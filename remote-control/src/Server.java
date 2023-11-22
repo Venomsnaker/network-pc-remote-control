@@ -152,4 +152,64 @@ public class Server implements NativeKeyListener{
             e.printStackTrace();
         }
     }
+
+    private List<String> getAppsList() {
+        List<String> appsList = new ArrayList<>();
+        try {
+            Process process = Runtime.getRuntime().exec("wmic product list");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        
+            String line;
+            while ((line = reader.readLine()) != null) {
+              if (line.startsWith("Name:")) {
+                String appName = line.substring(6).trim();
+                appsList.add(appName);
+              }
+            }
+        
+            reader.close();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        
+          return appsList;
+        }
+
+    private boolean startApp(String appName) {
+        try {
+            Runtime.getRuntime().exec("start " + appName);
+            return true;
+        } catch (IOException e) {
+        e.printStackTrace();
+        return false;
+        }
+    }
+
+    private boolean stopApp(String appName) {
+        try {
+            Runtime.getRuntime().exec("taskkill /F /IM " + appName + ".exe");
+            return true;
+        } catch (IOException e) {
+        e.printStackTrace();
+        return false;
+        }
+    }
+
+    private byte[] captureScreenshot() {
+        try {
+            Robot robot = new Robot();
+            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+            BufferedImage screenshot = robot.createScreenCapture(screenRect);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(screenshot, "PNG", baos);
+            baos.flush();
+            baos.close();
+
+            return baos.toByteArray();
+        } catch (AWTException | IOException e) {
+        e.printStackTrace();
+        return null;
+        }
+    }   
 }
