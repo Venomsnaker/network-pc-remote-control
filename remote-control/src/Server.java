@@ -58,6 +58,9 @@ public class Server implements NativeKeyListener {
                     writer.flush();
 
                 } else if (request.equals("get-services")) {
+                    String servicesList = getServicesList().toString();
+                    writer.println(servicesList);
+                    writer.flush();
 
                 } else if (request.startsWith("start-app-")) {
                     String appName = request.substring(10);
@@ -66,14 +69,22 @@ public class Server implements NativeKeyListener {
                     writer.flush();
 
                 } else if (request.startsWith("start-service-")) {
+                    String serviceName = request.substring(14);
+                    boolean success = startService(serviceName);
+                    writer.println(success);
+                    writer.flush();
 
                 } else if (request.startsWith("stop-app-")) {
-                    String appName = request.substring(10);
+                    String appName = request.substring(9);
                     boolean success = stopApp(appName);
                     writer.println(success);
                     writer.flush();
 
                 } else if (request.startsWith("stop-service-")) {
+                    String serviceName = request.substring(13);
+                    boolean success = stopService(serviceName);
+                    writer.println(success);
+                    writer.flush();
 
                 } else if (request.equals("screenshot")) {
                     try {
@@ -172,6 +183,11 @@ public class Server implements NativeKeyListener {
         return appsList;
     }
 
+    private static List<String> getServicesList() {
+        List<String> servicesList = new ArrayList<>();
+        return servicesList;
+    }
+
     private static boolean startApp(String appName) {
         try {
             Runtime.getRuntime().exec("start " + appName);
@@ -182,6 +198,10 @@ public class Server implements NativeKeyListener {
         }
     }
 
+    private static boolean startService(String serviceName) {
+        return false;
+    }
+
     private static boolean stopApp(String appName) {
         try {
             Runtime.getRuntime().exec("taskkill /F /IM " + appName + ".exe");
@@ -190,6 +210,10 @@ public class Server implements NativeKeyListener {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private  static boolean stopService(String serviceName) {
+        return false;
     }
 
     private static byte[] captureScreenshot() {

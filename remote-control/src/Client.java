@@ -93,11 +93,17 @@ public class Client {
                     case 5:
                         writer.println("start-service");
                         writer.flush();
+
+                        response = reader.readLine();
+                        System.out.println(response);
                         break;
 
                     case 6:
                         writer.println("stop-service");
                         writer.flush();
+
+                        response = reader.readLine();
+                        System.out.println(response);
                         break;
 
                     case 7:
