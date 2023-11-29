@@ -115,14 +115,19 @@ public class Client {
                         totalBytesRead = 0;
                         bytesReadThisTime = 0;
 
+                        System.out.println("Test the loop: ");
                         while (totalBytesRead < screenshotSize) {
                             bytesReadThisTime = socket.getInputStream().read(screenshotBytes, totalBytesRead, screenshotBytes.length - totalBytesRead);
                             if (bytesReadThisTime == -1) {
                                 System.out.println("End of stream reached before all bytes were read.");
                                 break;
                             }
-                            totalBytesRead += bytesReadThisTime;
+                            if (totalBytesRead >= screenshotSize) {
+                                break;
+                            }
                         }
+                        System.out.println("Test the loop: Good");
+
 
                         if (totalBytesRead >= screenshotSize) {
                             System.out.println("Enter screenshot file name: ");

