@@ -203,6 +203,21 @@ public class Server implements NativeKeyListener {
 
     private static List<String> getServicesList() {
         List<String> servicesList = new ArrayList<>();
+        try {
+            Process process = Runtime.getRuntime().exec("sc query type= service state= all");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Name:")) {
+                    String appName = line.substring(6).trim();
+                    appsList.add(appName);
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return servicesList;
     }
 
@@ -217,7 +232,14 @@ public class Server implements NativeKeyListener {
     }
 
     private static boolean startService(String serviceName) {
-        return false;
+        try {
+            Process process = Runtime.getRuntime().exec("net start " + serviceName);
+            int exitCode = process.waitFor();
+            return exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private static boolean stopApp(String appName) {
@@ -231,7 +253,14 @@ public class Server implements NativeKeyListener {
     }
 
     private  static boolean stopService(String serviceName) {
-        return false;
+        try {
+            Process process = Runtime.getRuntime().exec("net stop " + serviceName);
+            int exitCode = process.waitFor();
+            return exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 
