@@ -210,8 +210,8 @@ public class Server implements NativeKeyListener {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Name:")) {
-                    String appName = line.substring(6).trim();
-                    appsList.add(appName);
+                    String serviceName = line.substring(6).trim();
+                    servicesList.add(Name);
                 }
             }
             reader.close();
