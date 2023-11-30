@@ -1,6 +1,6 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,10 +16,7 @@ public class Client {
 
             String fileAddress = Paths.get("").toAbsolutePath().toString() + "/";
             Path filePathChecker = Paths.get(fileAddress);
-
-            int totalBytesRead = 0;
-            int bytesReadThisTime = 0;
-            String response;
+            String response = "";
 
             Scanner sc = new Scanner(System.in);
             boolean exit = false;
@@ -43,7 +40,6 @@ public class Client {
                 System.out.println("\nEnter your choice: ");
 
                 int choice = sc.nextInt();
-                sc.nextLine();
 
                 switch (choice) {
                     case 0:
@@ -55,7 +51,7 @@ public class Client {
                         writer.flush();
 
                         response = reader.readLine();
-                        System.out.println("List of apps on the server:");
+                        System.out.println("Apps List:");
                         System.out.println(response);
                         break;
 
@@ -64,7 +60,7 @@ public class Client {
                         writer.flush();
 
                         response = reader.readLine();
-                        System.out.println("List of service on the server:");
+                        System.out.println("Service List:");
                         System.out.println(response);
                         break;
 
@@ -76,7 +72,9 @@ public class Client {
                         writer.flush();
 
                         response = reader.readLine();
-                        System.out.println(response);
+                        if (response.equals("true")) {
+                            System.out.println("The app has been started");
+                        } else System.out.println("The app hasn't been started");
                         break;
 
                     case 4:
@@ -87,63 +85,43 @@ public class Client {
                         writer.flush();
 
                         response = reader.readLine();
-                        System.out.println(response);
+                        if (response.equals("true")) {
+                            System.out.println("The app has been stopped");
+                        } else System.out.println("The app hasn't been stopped");
                         break;
 
                     case 5:
-                        writer.println("start-service");
+                        System.out.println("Enter the name of the service you want to start: ");
+                        String serviceNameStart = sc.nextLine();
+
+                        writer.println("start-service-" + serviceNameStart);
                         writer.flush();
 
                         response = reader.readLine();
-                        System.out.println(response);
+                        if (response.equals("true")) {
+                            System.out.println("The service has been started");
+                        } else System.out.println("The service hasn't been started");
                         break;
 
                     case 6:
-                        writer.println("stop-service");
+                        System.out.println("Enter the name of the service you want to stop: ");
+                        String serviceNameStop = sc.nextLine();
+
+                        writer.println("stop-service-" + serviceNameStop);
                         writer.flush();
 
                         response = reader.readLine();
-                        System.out.println(response);
+                        if (response.equals("true")) {
+                            System.out.println("The service has been started");
+                        } else System.out.println("The service hasn't been started");
                         break;
 
                     case 7:
                         writer.println("screenshot");
                         writer.flush();
 
-                        int screenshotSize = Integer.parseInt(reader.readLine());
-                        byte[] screenshotBytes = new byte[screenshotSize];
-                        totalBytesRead = 0;
-                        bytesReadThisTime = 0;
-
-                        System.out.println("Test the loop: ");
-                        while (totalBytesRead < screenshotSize) {
-                            bytesReadThisTime = socket.getInputStream().read(screenshotBytes, totalBytesRead, screenshotBytes.length - totalBytesRead);
-                            if (bytesReadThisTime == -1) {
-                                System.out.println("End of stream reached before all bytes were read.");
-                                break;
-                            }
-                            if (totalBytesRead >= screenshotSize) {
-                                break;
-                            }
-                        }
-                        System.out.println("Test the loop: Good");
-
-
-                        if (totalBytesRead >= screenshotSize) {
-                            System.out.println("Enter screenshot file name: ");
-                            String screenshotFileName = sc.nextLine();
-
-                            Path screenshotFilePath = Paths.get(fileAddress + screenshotFileName);
-
-                            if (Files.isDirectory(filePathChecker.getParent()) && Files.isWritable(filePathChecker)) {
-                                Files.write(screenshotFilePath, screenshotBytes);
-                                System.out.println("Server screenshot saved to: " + screenshotFilePath);
-                            } else {
-                                System.out.println("Invalid file address or write permissions denied.");
-                            }
-                        } else {
-                            System.out.println("Incomplete screenshot transfer.");
-                        }
+                        BufferedImage image = ImageIO.read(socket.getInputStream());
+                        
                         break;
 
                     case 8:
@@ -167,7 +145,6 @@ public class Client {
                         } else {
                             System.out.println("Invalid file address or write permissions denied.");
                         }
-
                         break;
 
                     case 10:
@@ -196,19 +173,19 @@ public class Client {
 
                         int fileSize = Integer.parseInt(reader.readLine());
                         byte[] fileBytes = new byte[fileSize];
-                        totalBytesRead = 0;
-                        bytesReadThisTime = 0;
+                        int totalBytesReadFile = 0;
+                        int bytesReadFile = 0;
 
-                        while (totalBytesRead < fileSize) {
-                            bytesReadThisTime = socket.getInputStream().read(fileBytes, totalBytesRead, fileBytes.length - totalBytesRead);
-                            if (bytesReadThisTime == -1) {
+                        while (totalBytesReadFile < fileSize) {
+                            bytesReadFile = socket.getInputStream().read(fileBytes, totalBytesReadFile, fileBytes.length - totalBytesReadFile);
+                            if (bytesReadFile == -1) {
                                 System.out.println("End of stream reached before all bytes were read.");
                                 break;
                             }
-                            totalBytesRead += bytesReadThisTime;
+                            totalBytesReadFile += bytesReadFile;
                         }
 
-                        if (totalBytesRead == fileSize) {
+                        if (totalBytesReadFile == fileSize) {
                             System.out.println("Insert file name: ");
                             String fileName = sc.nextLine();
 
@@ -232,5 +209,19 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static ByteArrayInputStream getByteArrayInputStream(int screenshotSize, Socket socket) throws IOException {
+        byte[] screenshotBytes = new byte[screenshotSize];
+
+        InputStream in = socket.getInputStream();
+        int bytesReadScreenshot = 0;
+
+        while (bytesReadScreenshot < screenshotSize) {
+            bytesReadScreenshot += in.read(screenshotBytes, bytesReadScreenshot, screenshotSize - bytesReadScreenshot);
+        }
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(screenshotBytes);
+        return bais;
     }
 }

