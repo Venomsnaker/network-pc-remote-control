@@ -211,7 +211,7 @@ public class Server implements NativeKeyListener {
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Name:")) {
                     String serviceName = line.substring(6).trim();
-                    servicesList.add(Name);
+                    servicesList.add(serviceName);
                 }
             }
             reader.close();
