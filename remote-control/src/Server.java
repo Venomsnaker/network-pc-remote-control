@@ -52,8 +52,9 @@ public class Server implements NativeKeyListener {
                 String request = reader.readLine();
 
                 if (request.equals("get-apps")) {
-                    String appsList = getAppsList().toString();
-                    writer.println(appsList);
+                    List<String> apps = getAppsList();
+                    String appsString = String.join(";", apps);
+                    writer.println(appsString);
                     writer.flush();
 
                 } else if (request.equals("get-services")) {
@@ -67,15 +68,15 @@ public class Server implements NativeKeyListener {
                     writer.println(success);
                     writer.flush();
 
-                } else if (request.startsWith("start-service-")) {
-                    String serviceName = request.substring(14);
-                    boolean success = startService(serviceName);
-                    writer.println(success);
-                    writer.flush();
-
                 } else if (request.startsWith("stop-app-")) {
                     String appName = request.substring(9);
                     boolean success = stopApp(appName);
+                    writer.println(success);
+                    writer.flush();
+
+                } else if (request.startsWith("start-service-")) {
+                    String serviceName = request.substring(14);
+                    boolean success = startService(serviceName);
                     writer.println(success);
                     writer.flush();
 
@@ -182,23 +183,21 @@ public class Server implements NativeKeyListener {
     }
 
     private static List<String> getAppsList() {
-        List<String> appsList = new ArrayList<>();
+        List<String> apps = new ArrayList<>();
         try {
-            Process process = Runtime.getRuntime().exec("wmic product list");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            Process p = Runtime.getRuntime().exec
+                    (System.getenv("windir") +"\\system32\\"+"tasklist.exe");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Name:")) {
-                    String appName = line.substring(6).trim();
-                    appsList.add(appName);
-                }
+                apps.add(line);
             }
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return appsList;
+        return apps;
     }
 
     private static List<String> getServicesList() {
@@ -221,9 +220,10 @@ public class Server implements NativeKeyListener {
         return servicesList;
     }
 
-    private static boolean startApp(String appName) {
+    private static boolean startApp(String appPath) {
         try {
-            Runtime.getRuntime().exec("start " + appName);
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(new File(appPath));
             return true;
         } catch (IOException e) {
             e.printStackTrace();
