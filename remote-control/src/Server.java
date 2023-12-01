@@ -231,22 +231,22 @@ public class Server implements NativeKeyListener {
         }
     }
 
+    private static boolean stopApp(String appName) {
+        try {
+            Runtime.getRuntime().exec("taskkill /F /IM " + appName + ".exe");
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     private static boolean startService(String serviceName) {
         try {
             Process process = Runtime.getRuntime().exec("net start " + serviceName);
             int exitCode = process.waitFor();
             return exitCode == 0;
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private static boolean stopApp(String appName) {
-        try {
-            Runtime.getRuntime().exec("taskkill /F /IM " + appName + ".exe");
-            return true;
-        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }

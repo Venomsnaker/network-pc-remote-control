@@ -1,15 +1,17 @@
-import java.awt.*;
-import java.io.File;
+import java.io.IOException;
 
 public class Main {
-
     public static void main(String[] args) {
         try {
-            // Change the path to the path of your .exe file
-            Desktop desktop = Desktop.getDesktop();
-            desktop.open(new File("C:\\Program Files\\HWiNFO\\HWiNFO64.exe"));
-        }
-        catch (Exception e) {
+            String serviceName = "MySQL82";
+            Process process = Runtime.getRuntime().exec("net start " + serviceName);
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println("Service started successfully.");
+            } else {
+                System.out.println("Failed to start service. Exit code: " + exitCode);
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

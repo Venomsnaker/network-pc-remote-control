@@ -136,8 +136,8 @@ public class Client {
 
                         response = reader.readLine();
                         if (response.equals("true")) {
-                            System.out.println("The service has been started");
-                        } else System.out.println("The service hasn't been started");
+                            System.out.println("The service has been stopped");
+                        } else System.out.println("The service hasn't been stopped");
                         break;
 
                     case 7:
