@@ -1,4 +1,4 @@
-package util;
+package features.email;
 
 import java.util.Date;
 import java.util.Iterator;
