@@ -29,7 +29,6 @@ public class Email {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 
-        // create Authenticator
         Authenticator auth = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -38,35 +37,23 @@ public class Email {
             }
         };
 
-        // Phiên làm việc
         Session session = Session.getInstance(props, auth);
 
-        // Tạo một tin nhắn
         MimeMessage msg = new MimeMessage(session);
 
         try {
-            // Kiểu nội dung
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
 
-            // Người gửi
             msg.setFrom(from);
 
-            // Người nhận
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
 
-            // Tiêu đề email
             msg.setSubject(tieuDe);
 
-            // Quy đinh ngày gửi
             msg.setSentDate(new Date());
 
-            // Quy định email nhận phản hồi
-            // msg.setReplyTo(InternetAddress.parse(from, false))
-
-            // Nội dung
             msg.setContent(noiDung, "text/HTML; charset=UTF-8");
 
-            // Gửi email
             Transport.send(msg);
             System.out.println("Gửi email thành công");
             return true;
@@ -83,6 +70,5 @@ public class Email {
         }
 
     }
-
-
+    
 }
