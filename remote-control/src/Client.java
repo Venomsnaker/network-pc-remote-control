@@ -76,12 +76,19 @@ public class Client {
                         writer.flush();
 
                         response = reader.readLine();
-                        byte[] serviceBytes = response.getBytes();
+                        List<String> services = Arrays.asList(response.split(";"));
 
                         Path filePathServices = Paths.get(fileAddress + "/services.txt");
 
                         if (Files.isDirectory(filePathChecker.getParent()) && Files.isWritable(filePathChecker)) {
-                            Files.write(filePathServices, serviceBytes);
+                            try (BufferedWriter bw = Files.newBufferedWriter(filePathServices)) {
+                                for (String app : services) {
+                                    bw.write(app);
+                                    bw.newLine();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             System.out.println("A new file has been added to: " + fileAddress);
                         } else {
                             System.out.println("Invalid file address or write permissions denied.");
@@ -268,3 +275,4 @@ public class Client {
         }
     }
 }
+

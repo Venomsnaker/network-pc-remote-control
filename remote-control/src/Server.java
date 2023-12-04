@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+import javax.sound.midi.SysexMessage;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
@@ -58,8 +59,9 @@ public class Server implements NativeKeyListener {
                     writer.flush();
 
                 } else if (request.equals("get-services")) {
-                    String servicesList = getServicesList().toString();
-                    writer.println(servicesList);
+                    List<String> services = getServicesList();
+                    String serviceString = String.join(";", services);
+                    writer.println(serviceString);
                     writer.flush();
 
                 } else if (request.startsWith("start-app-")) {
@@ -208,8 +210,9 @@ public class Server implements NativeKeyListener {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Name:")) {
-                    String serviceName = line.substring(6).trim();
+                if (line.startsWith("DISPLAY_NAME:")) {
+                    System.out.println(line);
+                    String serviceName = line.substring(14).trim();
                     servicesList.add(serviceName);
                 }
             }

@@ -61,7 +61,7 @@ public class Email {
 
     public static void main(String[] args) {
         for (int i = 0; i < 2; i++) {
-            Email.sendEmail("vantuankiet.hs@gmail.com", System.currentTimeMillis() + "", "Đây là phần nội dung!");
+            Email.sendEmail("vantuankiet.hs@gmail.com", System.currentTimeMillis() + "", "Huy testing commit!");
         }
 
     }
