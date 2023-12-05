@@ -18,6 +18,10 @@ public class Email {
 
     static final String from  = "g4.22tnt1.hcmus@gmail.com";
     static final String password = "xpfabvasrrgbqmta";
+    static final String username = from;
+    static final String protocol = "imap";
+    static final String host = "imap.gmail.com";
+    static final String imap_port = "993";
 
     public static boolean sendEmail(String to, String tieuDe, String noiDung) {
         // Properties : khai báo các thuộc tính
@@ -62,10 +66,10 @@ public class Email {
         }
     }
 
-    private static Properties getServerProperties(String protocol, String host, String port) {
+    private static Properties getServerProperties() {
         Properties props = new Properties();
         props.put(String.format("mail.%s.host", protocol), host);
-        props.put(String.format("mail.%s.port", protocol), port);
+        props.put(String.format("mail.%s.port", protocol), imap_port);
 
         props.setProperty(
                 String.format("mail.%s.socketFactory.class", protocol),
@@ -77,20 +81,20 @@ public class Email {
 
         props.setProperty(
                 String.format("mail.%s.socketFactory.port", protocol),
-                String.valueOf(port));
+                String.valueOf(imap_port));
 
         return props;
     }
 
-    public static String[] getInfo(String protocol, String host, String port, String userName, String password) {
+    public static String[] getInfo() {
         String[] ans = {"", ""};
 
-        Properties props = getServerProperties(protocol, host, port);
+        Properties props = getServerProperties();
         Session session = Session.getDefaultInstance(props);
 
         try {
             Store store = session.getStore(protocol);
-            store.connect(userName, password);
+            store.connect(username, password);
 
             Folder folderInbox = store.getFolder("INBOX");
             folderInbox.open(Folder.READ_ONLY);
@@ -141,9 +145,9 @@ public class Email {
         String username = "g4.22tnt1.hcmus@gmail.com";
         String password = "xpfabvasrrgbqmta";
 
-//        Email.sendEmail("vantuankiet.hs@gmail.com", "try", "Day la noi dung thu");
+        Email.sendEmail("vantuankiet.hs@gmail.com", "try 3", "Day la noi dung thu");
 
-        String[] tmp =  Email.getInfo(protocol, host, port, username, password);
+        String[] tmp =  Email.getInfo();
         System.out.println(tmp[0]);
         System.out.println(tmp[1]);
 
