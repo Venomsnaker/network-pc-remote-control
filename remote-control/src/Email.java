@@ -1,5 +1,4 @@
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
 import javax.mail.Address;
 import javax.mail.Folder;
 import javax.mail.Authenticator;
@@ -13,15 +12,17 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.Store;
 
-
 public class Email {
 
     static final String from  = "g4.22tnt1.hcmus@gmail.com";
     static final String password = "xpfabvasrrgbqmta";
     static final String username = from;
-    static final String protocol = "imap";
-    static final String host = "imap.gmail.com";
-    static final String imap_port = "993";
+//    static final String protocol = "imap";
+//    static final String host = "imap.gmail.com";
+//    static final String get_port = "993";
+    static final String protocol = "pop3";
+    static final String host = "pop.gmail.com";
+    static final String get_port = "995";
 
     public static boolean sendEmail(String to, String tieuDe, String noiDung) {
         // Properties : khai báo các thuộc tính
@@ -69,7 +70,7 @@ public class Email {
     private static Properties getServerProperties() {
         Properties props = new Properties();
         props.put(String.format("mail.%s.host", protocol), host);
-        props.put(String.format("mail.%s.port", protocol), imap_port);
+        props.put(String.format("mail.%s.port", protocol), get_port);
 
         props.setProperty(
                 String.format("mail.%s.socketFactory.class", protocol),
@@ -81,14 +82,14 @@ public class Email {
 
         props.setProperty(
                 String.format("mail.%s.socketFactory.port", protocol),
-                String.valueOf(imap_port));
+                String.valueOf(get_port));
 
         return props;
     }
 
-    public static String[] getInfo() {
-        String[] ans = {"", ""};
-
+    public static int emailCounter = 0;
+    public static Queue<String[]> requests = new LinkedList<>();
+    public static void downloadEmails() throws MessagingException {
         Properties props = getServerProperties();
         Session session = Session.getDefaultInstance(props);
 
@@ -101,28 +102,35 @@ public class Email {
 
             Message[] messages = folderInbox.getMessages();
 
+            if (messages.length == emailCounter)
+                return;
 
-            Message msg = messages[messages.length - 1];
-            Address[] fromAddress = msg.getFrom();
-            String from = fromAddress[0].toString();
-            String subject = msg.getSubject();
-            String contentType = msg.getContentType();
-            String messageContent = "";
+            for (int i = emailCounter; i < messages.length; i++) {
+                Message msg = messages[i];
+                Address[] fromAddress = msg.getFrom();
+                String from = fromAddress[0].toString();
+                String subject = msg.getSubject();
+                String contentType = msg.getContentType();
+                String messageContent = "";
 
-            if (contentType.contains("text/html"))
-            {
-                try {
-                    Object content = msg.getContent();
-                    if (content != null) {
-                        messageContent = content.toString();
+                if (contentType.contains("text/html"))
+                {
+                    try {
+                        Object content = msg.getContent();
+                        if (content != null) {
+                            messageContent = content.toString();
+                        }
+                    } catch (Exception ex) {
+                        messageContent = "!Error downloading content";
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    messageContent = "!Error downloading content";
-                    ex.printStackTrace();
                 }
+
+                String[] tmp = {from, subject};
+                requests.offer(tmp);
             }
-            ans[0] = subject;
-            ans[1] = from;
+            emailCounter = messages.length;
+
         }
         catch (NoSuchProviderException ex) {
             System.out.println("No provider for protocol " + protocol);
@@ -132,24 +140,28 @@ public class Email {
             System.out.println("Could not connect to the message store");
             ex.printStackTrace();
         }
-
-        return ans;
     }
 
 
-    public static void main(String[] args) {
-        String protocol = "imap";
-        String host = "imap.gmail.com";
-        String port = "993";
 
-        String username = "g4.22tnt1.hcmus@gmail.com";
-        String password = "xpfabvasrrgbqmta";
+    public static void main(String[] args) throws MessagingException {
 
-        Email.sendEmail("vantuankiet.hs@gmail.com", "try 3", "Day la noi dung thu");
+//        Email.sendEmail("vantuankiet.hs@gmail.com", "try 3", "Day la noi dung thu");
+//
+//        String[] tmp =  Email.getInfo();
+//        System.out.println(tmp[0]);
+//        System.out.println(tmp[1]);
 
-        String[] tmp =  Email.getInfo();
-        System.out.println(tmp[0]);
-        System.out.println(tmp[1]);
+        while (true) {
+            Email.downloadEmails();
+
+            while (requests != null) {
+                String[] tmp = requests.poll();
+                System.out.println(tmp[0]);
+                System.out.println(tmp[1]);
+            }
+
+        }
 
     }
 
