@@ -1,4 +1,3 @@
-import java.util.*;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -8,19 +7,19 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
-import javax.mail.Multipart;
+import javax.mail.search.SearchTerm;
+import java.util.LinkedList;
+import java.util.Properties;
+import java.util.Queue;
 
 public class Email {
 
     static final String from  = "g4.22tnt1.hcmus@gmail.com";
     static final String password = "xpfabvasrrgbqmta";
     static final String username = from;
-//    static final String protocol = "imap";
-//    static final String host = "imap.gmail.com";
-//    static final String get_port = "993";
-    static final String protocol = "pop3";
-    static final String host = "pop.gmail.com";
-    static final String get_port = "995";
+    static final String protocol = "imap";
+    static final String host = "imap.gmail.com";
+    static final String get_port = "993";
 
     public static boolean sendEmail(String to, String tieuDe, String noiDung, String fileName) {
         // Properties : khai báo các thuộc tính
@@ -93,7 +92,6 @@ public class Email {
         return props;
     }
 
-    public static int emailCounter = 0;
     public static Queue<String[]> requests = new LinkedList<>();
     public static void downloadEmails() throws MessagingException {
         Properties props = getServerProperties();
@@ -104,23 +102,21 @@ public class Email {
             store.connect(username, password);
 
             Folder folderInbox = store.getFolder("INBOX");
-            folderInbox.open(Folder.READ_ONLY);
+            folderInbox.open(Folder.READ_WRITE);
 
-            Message[] messages = folderInbox.getMessages();
+            SearchTerm searchTerm = new FlagTerm(new Flags(Flags.Flag.SEEN), false); // Search for UNSEEN messages
+            Message[] messages = folderInbox.search(searchTerm);
 
-            if (messages.length == emailCounter)
-                return;
+            for (Message msg : messages) {
+                msg.setFlag(Flags.Flag.SEEN, true);
 
-            for (int i = emailCounter; i < messages.length; i++) {
-                Message msg = messages[i];
                 Address[] fromAddress = msg.getFrom();
                 String from = fromAddress[0].toString();
                 String subject = msg.getSubject();
                 String contentType = msg.getContentType();
                 String messageContent = "";
 
-                if (contentType.contains("text/html"))
-                {
+                if (contentType.contains("text/html")) {
                     try {
                         Object content = msg.getContent();
                         if (content != null) {
@@ -131,12 +127,13 @@ public class Email {
                         ex.printStackTrace();
                     }
                 }
-
                 String[] tmp = {from, subject};
                 requests.offer(tmp);
-            }
-            emailCounter = messages.length;
+                System.out.println(messageContent);
 
+            }
+            folderInbox.close(false);
+            store.close();
         }
         catch (NoSuchProviderException ex) {
             System.out.println("No provider for protocol " + protocol);
@@ -149,8 +146,6 @@ public class Email {
     }
 
 
-
-
     public static void main(String[] args) throws MessagingException {
 
         while (true) {
@@ -160,7 +155,8 @@ public class Email {
             String[] tmp = requests.poll();
             if (tmp == null)
                 continue;
-//            Email.sendEmail(tmp[0], "Response your request", tmp[1], "");
+            System.out.println(tmp[0]);
+            System.out.println(tmp[1]);
         }
 
     }
