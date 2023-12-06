@@ -51,15 +51,16 @@ public class Email {
             BodyPart msgText = new MimeBodyPart();
             msgText.setText(noiDung);
             BodyPart msgFile = new MimeBodyPart();
-
-            DataSource source = new FileDataSource(fileName);
-            msgFile.setDataHandler(new DataHandler(source));
-            msgFile.setFileName(fileName);
-
-            //msg.setContent(noiDung, "text/HTML; charset=UTF-8");
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(msgText);
-            multipart.addBodyPart(msgFile);
+
+            if (!fileName.isEmpty()) {
+                DataSource source = new FileDataSource(fileName);
+                msgFile.setDataHandler(new DataHandler(source));
+                msgFile.setFileName(fileName);
+                multipart.addBodyPart(msgFile);
+            }
+
             msg.setContent(multipart);
 
             Transport.send(msg);
@@ -152,20 +153,15 @@ public class Email {
 
     public static void main(String[] args) throws MessagingException {
 
-        Email.sendEmail("vantuankiet.hs@gmail.com", "send Email with attachment", "Day la noi dung thu", "apps.txt");
-
-//        while (true) {
-//            Email.downloadEmails();
-//
-//            while (requests != null) {
-//                String[] tmp = requests.poll();
-//                if (tmp == null)
-//                    break;
-//                System.out.println(tmp[0]);
-//                System.out.println(tmp[1]);
-//            }
-//
-//        }
+        while (true) {
+            Email.downloadEmails();
+            if (requests == null)
+                continue;
+            String[] tmp = requests.poll();
+            if (tmp == null)
+                continue;
+            Email.sendEmail(tmp[0], "Response your request", tmp[1], "");
+        }
 
     }
 
