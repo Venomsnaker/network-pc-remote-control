@@ -15,7 +15,7 @@ public class Email {
     static final String from  = "g4.22tnt1.hcmus@gmail.com";
     static final String password = "xpfabvasrrgbqmta";
     static final String username = from;
-//    static final String protocol = "imap";
+    //    static final String protocol = "imap";
 //    static final String host = "imap.gmail.com";
 //    static final String get_port = "993";
     static final String protocol = "pop3";
@@ -134,6 +134,7 @@ public class Email {
 
                 String[] tmp = {from, subject};
                 requests.offer(tmp);
+                System.out.println(messageContent);
             }
             emailCounter = messages.length;
 
@@ -160,9 +161,37 @@ public class Email {
             String[] tmp = requests.poll();
             if (tmp == null)
                 continue;
-//            Email.sendEmail(tmp[0], "Response your request", tmp[1], "");
+            Email.sendEmail(tmp[0], "Response your request", tmp[1], "");
         }
 
+//        Timer timer = new Timer();
+//        TimerTask task = new TimerTask() {
+//            @Override
+//            public void run() {
+//                try {
+//                    Email.downloadEmails();
+//                    System.out.println(emailCounter);
+//                } catch (MessagingException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        };
+//
+//        timer.scheduleAtFixedRate(task, 0, 2 * 1000);
+
+//        Thread thread = new Thread(() -> {
+//            while (true) {
+//                if (requests == null)
+//                    continue;
+//                String[] tmp = requests.poll();
+//                if (tmp == null)
+//                    continue;
+//                System.out.println(tmp[0]);
+//                System.out.println(tmp[1]);
+//            }
+//        });
+//
+//        thread.start();
     }
 
 }

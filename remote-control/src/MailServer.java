@@ -6,7 +6,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.FlagTerm;
 import java.awt.image.MultiPixelPackedSampleModel;
+import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Properties;
@@ -99,6 +101,20 @@ public class MailServer {
         return props;
     }
 
+    private static String getTextFromMimeMultiPart(MimeMultipart mimeMultipart) throws MessagingException, IOException {
+        StringBuilder result = new StringBuilder();
+        int count = mimeMultipart.getCount();
+        for (int i = 0; i < count; i++) {
+            BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+            if (bodyPart.isMimeType("text/plain") || bodyPart.isMimeType("text/html")) {
+                result.append((String) bodyPart.getContent());
+            } else if (bodyPart.getContent() instanceof MimeMultipart) {
+                result.append(getTextFromMimeMultiPart((MimeMultipart) bodyPart.getContent()));
+            }
+        }
+        return result.toString();
+    }
+
     private static void downloadEmails() throws MessagingException {
         Properties props = getServerProperties();
         Session session = Session.getDefaultInstance(props);
@@ -107,48 +123,47 @@ public class MailServer {
             Store store = session.getStore(protocol);
             store.connect(userName, password);
 
-            Folder folderInbox = store.getFolder("INBOX");
-            folderInbox.open(Folder.READ_ONLY);
+            boolean flag = false;
+            int count = 0;
 
-            Message[] messages = folderInbox.getMessages();
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_WRITE);
 
-            if (messages.length == emailCounter)
-                return;
+            Message[] messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 
-            for (int i = emailCounter; i < messages.length; i++) {
-                Message msg = messages[i];
-                Address[] fromAddress = msg.getFrom();
-                String from = fromAddress[0].toString();
-                String subject = msg.getSubject();
-                String contentType = msg.getContentType();
-                String messageContent = "";
+            if (messages.length >= 0) {
+                for (int i = messages.length - 1; i >= 0; i--) {
+                    Message msg = messages[i];
 
-                if (contentType.contains("text/html"))
-                {
-                    try {
-                        Object content = msg.getContent();
-                        if (content != null) {
-                            messageContent = content.toString();
-                        }
-                    } catch (Exception ex) {
-                        messageContent = "!Error downloading content";
-                        ex.printStackTrace();
+                    Address[] fromAddress = msg.getFrom();
+                    String from = fromAddress[0].toString();
+                    String subject = msg.getSubject();
+
+                    count++;
+                    flag = true;
+                    msg.setFlag(Flags.Flag.SEEN, true);
+
+                    String messageContent = "";
+                    if (msg.getContentType().contains("multipart")) {
+                        MimeMultipart mimeMultipart = (MimeMultipart) msg.getContent();
+                        messageContent = getTextFromMimeMultiPart(mimeMultipart);
                     }
+                    if (msg.isMimeType("text/plain") || msg.isMimeType("text/html")) {
+                        messageContent = msg.getContent().toString();
+                    }
+                    String[] tmp = {from, subject, messageContent};
+                    requests.offer(tmp);
+
+                    emailCounter++;
+                    if (flag == true){
+                        inbox.close(true);
+                        break;
+                    }
+                    if (count == emailCounter) break;
                 }
-
-                String[] tmp = {from, subject, messageContent};
-                requests.offer(tmp);
             }
-            emailCounter = messages.length;
-
-        }
-        catch (NoSuchProviderException ex) {
-            System.out.println("No provider for protocol " + protocol);
-            ex.printStackTrace();
-        }
-        catch (MessagingException ex) {
-            System.out.println("Could not connect to the message store");
-            ex.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -163,15 +178,65 @@ public class MailServer {
         String subjectInput = tmp[1];
         String contentInput = tmp[2];
 
+        subjectReturn = "Respond: " + subjectInput;
         if (subjectInput.equals("get-apps")) {
-            subjectReturn = "Respond: Apps List";
             attachmentReturn = MailServerHelpers.getAppsList();
 
-            if (attachmentReturn.equals("")) {
+            if (attachmentReturn.isEmpty()) {
                 contentReturn = "Fail to get apps list.";
             } else {
-                contentReturn = "Please check the attachment file.";
+                contentReturn = "Successfully get an apps list.";
             }
+
+        }else if (subjectInput.equals("get-services")) {
+            attachmentReturn = MailServerHelpers.getServicesList();
+
+            if (attachmentReturn.isEmpty()) {
+                contentReturn = "Fail to get services list.";
+            } else {
+                contentReturn = "Successfully get a services list";
+            }
+
+        }else if (subjectInput.equals("start-app")) {
+            contentReturn = MailServerHelpers.startApp(contentInput);
+
+        }else if (subjectInput.equals("stop-app")) {
+            contentReturn = MailServerHelpers.stopApp(contentInput);
+
+        }else if (subjectInput.equals("start-service")) {
+            contentReturn = MailServerHelpers.startService(contentInput);
+
+        }else if (subjectInput.equals("stop-service")) {
+            contentReturn = MailServerHelpers.stopService(contentInput);
+
+        }else if (subjectInput.equals("get-screenshot")) {
+            attachmentReturn = MailServerHelpers.getScreenshot();
+
+            if (attachmentReturn.isEmpty()) {
+                contentReturn = "Fail to capture a screenshot.";
+            } else {
+                contentReturn = "Successfully get an screenshot.";
+            }
+
+        }else if (subjectInput.equals("shutdown-server")) {
+            contentReturn = MailServerHelpers.shutdownServer(contentInput);
+
+        }else if (subjectInput.equals("restart-server")) {
+            contentReturn = MailServerHelpers.restartServer(contentInput);
+
+        }else if (subjectInput.equals("cancel-server-shutdown")) {
+            contentReturn = MailServerHelpers.cancelServerShutdown();
+
+        }else if (subjectInput.equals("collect-file")) {
+            attachmentReturn = MailServerHelpers.collectFile(contentInput);
+
+            if (attachmentReturn.isEmpty()) {
+                contentReturn = "Fail to get the file at: " + contentInput;
+            } else {
+                contentReturn = "Successfully get the file at: " + contentInput;
+            }
+        }else {
+            contentReturn = "You have input the wrong command!" + " Here is the list of command you can try:";
         }
 
         return new String[]{to, subjectReturn, contentReturn, attachmentReturn};
@@ -183,11 +248,10 @@ public class MailServer {
             MailServer.downloadEmails();
             if (requests == null) continue;
             String[] tmp = requests.poll();
-            if (tmp == null) continue;
-
-            String[] respondContent = MailServer.processMail(tmp);
-            System.out.println(respondContent);
-            MailServer.sendMail(respondContent);
+            if (tmp != null) {
+                String[] respondContent = MailServer.processMail(tmp);
+                MailServer.sendMail(respondContent);
+            }
         }
     }
 }
