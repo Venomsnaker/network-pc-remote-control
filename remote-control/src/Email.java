@@ -1,16 +1,14 @@
 import java.util.*;
-import javax.mail.Address;
-import javax.mail.Folder;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.Store;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.search.FlagTerm;
+import javax.mail.Multipart;
 
 public class Email {
 
@@ -24,7 +22,7 @@ public class Email {
     static final String host = "pop.gmail.com";
     static final String get_port = "995";
 
-    public static boolean sendEmail(String to, String tieuDe, String noiDung) {
+    public static boolean sendEmail(String to, String tieuDe, String noiDung, String fileName) {
         // Properties : khai báo các thuộc tính
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP HOST
@@ -46,16 +44,23 @@ public class Email {
 
         try {
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
-
             msg.setFrom(from);
-
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
-
             msg.setSubject(tieuDe);
 
-            msg.setSentDate(new Date());
+            BodyPart msgText = new MimeBodyPart();
+            msgText.setText(noiDung);
+            BodyPart msgFile = new MimeBodyPart();
 
-            msg.setContent(noiDung, "text/HTML; charset=UTF-8");
+            DataSource source = new FileDataSource(fileName);
+            msgFile.setDataHandler(new DataHandler(source));
+            msgFile.setFileName(fileName);
+
+            //msg.setContent(noiDung, "text/HTML; charset=UTF-8");
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(msgText);
+            multipart.addBodyPart(msgFile);
+            msg.setContent(multipart);
 
             Transport.send(msg);
             System.out.println("Gửi email thành công");
@@ -144,24 +149,23 @@ public class Email {
 
 
 
+
     public static void main(String[] args) throws MessagingException {
 
-//        Email.sendEmail("vantuankiet.hs@gmail.com", "try 3", "Day la noi dung thu");
+        Email.sendEmail("vantuankiet.hs@gmail.com", "send Email with attachment", "Day la noi dung thu", "apps.txt");
+
+//        while (true) {
+//            Email.downloadEmails();
 //
-//        String[] tmp =  Email.getInfo();
-//        System.out.println(tmp[0]);
-//        System.out.println(tmp[1]);
-
-        while (true) {
-            Email.downloadEmails();
-
-            while (requests != null) {
-                String[] tmp = requests.poll();
-                System.out.println(tmp[0]);
-                System.out.println(tmp[1]);
-            }
-
-        }
+//            while (requests != null) {
+//                String[] tmp = requests.poll();
+//                if (tmp == null)
+//                    break;
+//                System.out.println(tmp[0]);
+//                System.out.println(tmp[1]);
+//            }
+//
+//        }
 
     }
 
