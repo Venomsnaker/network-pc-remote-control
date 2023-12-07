@@ -7,22 +7,23 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
+import javax.mail.search.SearchTerm;
 import java.awt.image.MultiPixelPackedSampleModel;
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Queue;
+import java.util.stream.StreamSupport;
 
 public class MailServer {
     static final String from = "g4.22tnt1.hcmus@gmail.com";
     static final String password = "xpfabvasrrgbqmta";
     static final String userName = from;
-    static final String host = "pop.gmail.com";
-    static final String protocol = "pop3";
-    static final String getPort = "995";
+    static final String protocol = "imap";
+    static final String host = "imap.gmail.com";
+    static final String getPort = "993";
 
-    public static int emailCounter = 0;
     public static Queue<String[]> requests = new LinkedList<>();
 
     private static boolean sendMail(String[] respondContent) {
@@ -101,18 +102,16 @@ public class MailServer {
         return props;
     }
 
-    private static String getTextFromMimeMultiPart(MimeMultipart mimeMultipart) throws MessagingException, IOException {
-        StringBuilder result = new StringBuilder();
-        int count = mimeMultipart.getCount();
-        for (int i = 0; i < count; i++) {
-            BodyPart bodyPart = mimeMultipart.getBodyPart(i);
-            if (bodyPart.isMimeType("text/plain") || bodyPart.isMimeType("text/html")) {
-                result.append((String) bodyPart.getContent());
-            } else if (bodyPart.getContent() instanceof MimeMultipart) {
-                result.append(getTextFromMimeMultiPart((MimeMultipart) bodyPart.getContent()));
+    private static Part getBodyPart(Multipart multipart) throws MessagingException, IOException {
+        for (int i = 0; i < multipart.getCount(); i++) {
+            Part part = multipart.getBodyPart(i);
+            if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+                return part;
+            } else if (part.isMimeType("multipart/*")) {
+                return getBodyPart((Multipart) part.getContent());
             }
         }
-        return result.toString();
+        return null;
     }
 
     private static void downloadEmails() throws MessagingException {
@@ -123,45 +122,45 @@ public class MailServer {
             Store store = session.getStore(protocol);
             store.connect(userName, password);
 
-            boolean flag = false;
-            int count = 0;
+            Folder folderInbox = store.getFolder("INBOX");
+            folderInbox.open(Folder.READ_WRITE);
 
-            Folder inbox = store.getFolder("INBOX");
-            inbox.open(Folder.READ_WRITE);
+            SearchTerm searchTerm = new FlagTerm(new Flags(Flags.Flag.SEEN), false); // Search for UNSEEN messages
+            Message[] messages = folderInbox.search(searchTerm);
 
-            Message[] messages = inbox.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+            for (Message msg : messages) {
+                msg.setFlag(Flags.Flag.SEEN, true);
 
-            if (messages.length >= 0) {
-                for (int i = messages.length - 1; i >= 0; i--) {
-                    Message msg = messages[i];
+                Address[] fromAddress = msg.getFrom();
+                String from = fromAddress[0].toString();
+                String subject = msg.getSubject();
+                String messageContent = "";
 
-                    Address[] fromAddress = msg.getFrom();
-                    String from = fromAddress[0].toString();
-                    String subject = msg.getSubject();
+                Multipart multipart = (Multipart) msg.getContent();
+                Part bodyPart = getBodyPart(multipart);
 
-                    count++;
-                    flag = true;
-                    msg.setFlag(Flags.Flag.SEEN, true);
-
-                    String messageContent = "";
-                    if (msg.getContentType().contains("multipart")) {
-                        MimeMultipart mimeMultipart = (MimeMultipart) msg.getContent();
-                        messageContent = getTextFromMimeMultiPart(mimeMultipart);
-                    }
-                    if (msg.isMimeType("text/plain") || msg.isMimeType("text/html")) {
-                        messageContent = msg.getContent().toString();
-                    }
-                    String[] tmp = {from, subject, messageContent};
-                    requests.offer(tmp);
-
-                    emailCounter++;
-                    if (flag == true){
-                        inbox.close(true);
-                        break;
-                    }
-                    if (count == emailCounter) break;
+                if (bodyPart.isMimeType("text/plain")) {
+                    messageContent = bodyPart.getContent().toString();
+                } else if (bodyPart.isMimeType("text/html")) {
+                    messageContent = bodyPart.getContent().toString();
+                } else {
+                    System.out.println("Body Content is not available");
                 }
+
+                messageContent = messageContent.replace("\n", "").replace("\r", "");
+                String[] tmp = {from, subject, messageContent};
+                requests.offer(tmp);
             }
+            folderInbox.close(false);
+            store.close();
+        }
+        catch (NoSuchProviderException ex) {
+            System.out.println("No provider for protocol " + protocol);
+            ex.printStackTrace();
+        }
+        catch (MessagingException ex) {
+            System.out.println("Could not connect to the message store");
+            ex.printStackTrace();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
