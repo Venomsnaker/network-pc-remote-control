@@ -6,22 +6,16 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
-public class Main implements NativeKeyListener {
-    static private String keyloggerResult = "";
-
-    @Override
-    public void nativeKeyPressed(NativeKeyEvent e) {
-//        System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
-        keyloggerResult += NativeKeyEvent.getKeyText(e.getKeyCode()) + " ";
-        NativeKeyListener.super.nativeKeyPressed(e);
-    }
+public class Main{
+    static private List<String> keyloggerResult;
 
     public static void main(String[] args) throws IOException, NativeHookException {
         System.out.println("Hello World");
         Main main = new Main();
-        GlobalScreen.registerNativeHook();
+//        GlobalScreen.registerNativeHook();
 
         while (true) {
             Scanner myObj = new Scanner(System.in);
