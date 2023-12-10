@@ -10,10 +10,7 @@ import javax.mail.search.FlagTerm;
 import javax.mail.search.SearchTerm;
 import java.awt.image.MultiPixelPackedSampleModel;
 import java.io.IOException;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Properties;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 public class MailServer {
@@ -25,6 +22,9 @@ public class MailServer {
     static final String getPort = "993";
 
     public static Queue<String[]> requests = new LinkedList<>();
+
+    static private List<String> mailSaved = new ArrayList<String>();
+    static private Map<String, String> appsSaved = new HashMap<String, String>();
 
     private static boolean sendMail(String[] respondContent) {
         Properties props = new Properties();
@@ -166,6 +166,26 @@ public class MailServer {
         }
     }
 
+    private static void addMailAddress(String mail) {
+        mailSaved.add(mail);
+        // Update UI
+    }
+
+    private static void removeMailAddress(String mail) {
+        mailSaved.remove(mail);
+        // Update UI
+    }
+
+    private static void addAppAddress(String appName, String appPath) {
+        appsSaved.put(appName, appPath);
+        // Update UI
+    }
+
+    private static void removeAppAddress(String appName) {
+        appsSaved.remove(appName);
+        // Update UI
+    }
+
     private static String[] processMail(String[] tmp) {
         // Return Variables
         String to = tmp[0];
@@ -178,7 +198,12 @@ public class MailServer {
         String contentInput = tmp[2];
 
         subjectReturn = "Respond: " + subjectInput;
-        if (subjectInput.equals("get-apps")) {
+
+        System.out.println(to);
+        if (!(mailSaved.contains(to))) {
+            contentReturn = "You gmail don't have the permission to control the machine.";
+
+        }else if (subjectInput.equals("get-apps")) {
             attachmentReturn = MailServerHelpers.getAppsList();
 
             if (attachmentReturn.isEmpty()) {
@@ -198,6 +223,13 @@ public class MailServer {
 
         }else if (subjectInput.equals("start-app")) {
             contentReturn = MailServerHelpers.startApp(contentInput);
+
+        }else if (subjectInput.equals("start-app-by-name")) {
+            if (appsSaved.containsKey(contentInput)) {
+                contentReturn = MailServerHelpers.startApp(appsSaved.get(contentInput));
+            } else {
+                contentReturn = "The app you wish to start has not been set up | You have input the wrong name.";
+            }
 
         }else if (subjectInput.equals("stop-app")) {
             contentReturn = MailServerHelpers.stopApp(contentInput);
@@ -256,6 +288,9 @@ public class MailServer {
 
 
     public static void main(String[] args) throws MessagingException{
+//        addMailAddress("Huy Bui <qhuy.bui.persona@gmail.com>");
+//        addAppAddress("HWiNFO64", "C:/Program Files/HWiNFO/HWiNFO64.exe");
+
         while(true) {
             MailServer.downloadEmails();
             if (requests == null) continue;

@@ -3,7 +3,7 @@ get-services
 start-app
 	C:\Program Files\HWiNFO\HWiNFO64.exe
 stop-app
-	HWiNFO64
+	Firefox
 stop-service
 	MySQL82
 start-service
