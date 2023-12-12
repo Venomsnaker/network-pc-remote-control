@@ -12,6 +12,10 @@ public class GuideController extends BaseController{
     @FXML
     private Button returnButton;
 
+    public void initGuideController() {
+        guideTxt.setText("Lol");
+    }
+
     @FXML
     protected void onReturnButtonClick() {
         sceneManager.switchScene("menu-view.fxml");

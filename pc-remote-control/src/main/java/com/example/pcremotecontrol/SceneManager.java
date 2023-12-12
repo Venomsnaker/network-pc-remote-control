@@ -1,8 +1,9 @@
 package com.example.pcremotecontrol;
 
-import com.example.pcremotecontrol.controllers.BaseController;
+import com.example.pcremotecontrol.controllers.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -30,6 +31,13 @@ public class SceneManager {
                 Pane p = loader.load();
                 BaseController controller = loader.getController();
                 controller.setSceneManager(this);
+                // Mange Controllers Init
+                if (controller instanceof MenuController) {
+                    ((MenuController) controller).initMenu();
+                }
+                else if (controller instanceof GuideController) {
+                    ((GuideController) controller).initGuideController();
+                }
                 return new Scene(p);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

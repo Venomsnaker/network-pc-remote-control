@@ -1,6 +1,7 @@
 package com.example.pcremotecontrol.controllers;
 
 import com.example.pcremotecontrol.SceneManager;
+import javafx.application.Application;
 
 public abstract class BaseController {
     protected SceneManager sceneManager;
