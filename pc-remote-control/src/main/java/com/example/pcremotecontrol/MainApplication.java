@@ -7,12 +7,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MenuApplication extends Application {
+
+public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         SceneManager sceneManager = new SceneManager(stage);
         sceneManager.switchScene("menu-view.fxml");
         stage.setTitle("PC Remote Control");
+        stage.setResizable(false);
         stage.show();
     }
 

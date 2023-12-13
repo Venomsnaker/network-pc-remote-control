@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class AppsLibraryController extends BaseController{
+public class AppLibraryController extends BaseController{
     @FXML
     private Label appsLibraryTxt;
 

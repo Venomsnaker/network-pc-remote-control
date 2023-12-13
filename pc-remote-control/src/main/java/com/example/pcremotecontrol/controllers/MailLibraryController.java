@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class MailsLibraryController extends BaseController{
+public class MailLibraryController extends BaseController{
     @FXML
     private Label mailsLibraryTxt;
 
