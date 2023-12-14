@@ -1,14 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.pcremotecontrol.controllers.CreditController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pcremotecontrol.controllers.CreditController"><children>
+    <BorderPane prefHeight="600.0" prefWidth="900.0">
+        <left>
+            <VBox alignment="CENTER" prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #c0c0c0; -fx-border-color: #555555; -fx-border-width: 0 5 0 0;" BorderPane.alignment="CENTER">
+                <children>
+                    <Button mnemonicParsing="false" onAction="#onMenuButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Trang Chủ" textFill="ALICEBLUE">
+                        <graphic>
+                            <FontAwesomeIconView fill="ALICEBLUE" glyphName="LIST" />
+                        </graphic>
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Button>
+                    <Button fx:id="guideButton" mnemonicParsing="false" onAction="#onGuideButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Hướng Dẫn" textFill="ALICEBLUE">
+                        <graphic>
+                            <FontAwesomeIconView fill="aliceblue" glyphName="PENCIL" />
+                        </graphic>
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Button>
+                    <Button mnemonicParsing="false" onAction="#onMailLibraryButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Mails" textFill="ALICEBLUE">
+                        <graphic>
+                            <FontAwesomeIconView fill="aliceblue" glyphName="MAIL_FORWARD" />
+                        </graphic>
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Button>
+                    <Button mnemonicParsing="false" onAction="#onAppLibraryButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Apps" textFill="ALICEBLUE">
+                        <graphic>
+                            <FontAwesomeIconView fill="aliceblue" glyphName="FOLDER" />
+                        </graphic>
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Button>
+                    <Button mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thoát" textFill="ALICEBLUE">
+                        <graphic>
+                            <FontAwesomeIconView fill="aliceblue" glyphName="CLOSE" />
+                        </graphic>
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Button>
+                </children>
+            </VBox>
+        </left>
+        <top>
+            <HBox prefHeight="125.0" prefWidth="900.0" style="-fx-background-color: #1A1110; -fx-border-color: #555555; -fx-border-width: 0 0 5 0;" BorderPane.alignment="CENTER">
+                <children>
+                    <Label alignment="CENTER" prefHeight="125.0" prefWidth="250.0" text="PC Remote Control" textAlignment="CENTER" textFill="ALICEBLUE">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Label>
+                </children>
+            </HBox>
+        </top>
+        <center>
+            <VBox style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
+                <children>
+                    <Label fx:id="mainTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="475.0" prefWidth="700.0" text="Credit View" textFill="BLACK">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                        <opaqueInsets>
+                            <Insets />
+                        </opaqueInsets>
+                        <VBox.margin>
+                            <Insets top="100.0" />
+                        </VBox.margin>
+                    </Label>
+                </children></VBox>
+        </center>
+    </BorderPane>
+</children>
 </AnchorPane>

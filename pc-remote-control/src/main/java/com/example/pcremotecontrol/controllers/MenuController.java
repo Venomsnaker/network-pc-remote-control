@@ -41,29 +41,4 @@ public class MenuController extends BaseController{
             // Stop The Mail Server
         }
     }
-
-    @FXML
-    protected void onGuideButtonClick() {
-        sceneManager.switchScene("guide-view.fxml");
-    }
-
-    @FXML
-    protected void onMailLibraryButtonClick() {
-        sceneManager.switchScene("mail-library-view.fxml");
-    }
-
-    @FXML
-    protected void onAppLibraryButtonClick() {
-        sceneManager.switchScene("app-library-view.fxml");
-    }
-
-    @FXML
-    protected void onCreditButtonClick() {
-        sceneManager.switchScene("credit-view.fxml");
-    }
-
-    @FXML
-    protected void onExitButtonClick() {
-        System.exit(0);
-    }
 }

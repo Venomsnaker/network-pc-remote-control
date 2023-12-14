@@ -1,46 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pcremotecontrol.controllers.MenuController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pcremotecontrol.controllers.MenuController">
   <children>
     <BorderPane prefHeight="600.0" prefWidth="900.0">
       <left>
-        <VBox prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #343434; -fx-alignment: center;" BorderPane.alignment="CENTER">
+        <VBox alignment="CENTER" prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #c0c0c0; -fx-border-color: #555555; -fx-border-width: 0 5 0 0;" BorderPane.alignment="CENTER">
           <children>
-            <Button mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Bắt Đầu" textFill="ALICEBLUE">
+            <Button fx:id="startButton" mnemonicParsing="false" onAction="#onStartButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Bắt Đầu" textFill="ALICEBLUE">
+              <graphic>
+                <FontAwesomeIconView fill="ALICEBLUE" glyphName="PLAY" />
+              </graphic>
               <font>
                 <Font size="18.0" />
-              </font>s
-            </Button>
+              </font>
+              </Button>
             <Button fx:id="guideButton" mnemonicParsing="false" onAction="#onGuideButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Hướng Dẫn" textFill="ALICEBLUE">
+              <graphic>
+                <FontAwesomeIconView fill="aliceblue" glyphName="PENCIL" />
+              </graphic>
               <font>
                 <Font size="18.0" />
               </font>
             </Button>
             <Button mnemonicParsing="false" onAction="#onMailLibraryButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Mails" textFill="ALICEBLUE">
+              <graphic>
+                <FontAwesomeIconView fill="aliceblue" glyphName="MAIL_FORWARD" />
+              </graphic>
               <font>
                 <Font size="18.0" />
               </font>
             </Button>
             <Button mnemonicParsing="false" onAction="#onAppLibraryButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Apps" textFill="ALICEBLUE">
+              <graphic>
+                <FontAwesomeIconView fill="aliceblue" glyphName="FOLDER" />
+              </graphic>
               <font>
                 <Font size="18.0" />
               </font>
             </Button>
             <Button mnemonicParsing="false" onAction="#onCreditButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thông Tin" textFill="ALICEBLUE">
+              <graphic>
+                <FontAwesomeIconView fill="aliceblue" glyphName="INFO" />
+              </graphic>
               <font>
                 <Font size="18.0" />
               </font>
             </Button>
             <Button mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thoát" textFill="ALICEBLUE">
+              <graphic>
+                <FontAwesomeIconView fill="aliceblue" glyphName="CLOSE" />
+              </graphic>
               <font>
                 <Font size="18.0" />
               </font>
@@ -49,7 +64,7 @@
         </VBox>
       </left>
       <top>
-        <HBox prefHeight="125.0" prefWidth="900.0" style="-fx-background-color: #100C08;" BorderPane.alignment="CENTER">
+        <HBox prefHeight="125.0" prefWidth="900.0" style="-fx-background-color: #1A1110; -fx-border-color: #555555; -fx-border-width: 0 0 5 0;" BorderPane.alignment="CENTER">
           <children>
             <Label alignment="CENTER" prefHeight="125.0" prefWidth="250.0" text="PC Remote Control" textAlignment="CENTER" textFill="ALICEBLUE">
               <font>
@@ -60,18 +75,18 @@
         </HBox>
       </top>
       <center>
-        <VBox style="-fx-background-color: #696969;" BorderPane.alignment="CENTER">
+        <VBox style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
           <children>
-            <Label fx:id="mainTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="475.0" prefWidth="700.0" text="&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, &#10;sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. &#10;Ut enim ad minim veniam, quis nostrud exercitation ullamco &#10;laboris nisi ut aliquip ex ea commodo consequat. &#10;Duis aute irure dolor in reprehenderit in voluptate velit esse cillum &#10;dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, &#10;sunt in culpa qui officia deserunt mollit anim id est laborum.&quot;" textFill="ALICEBLUE">
+            <Label fx:id="mainTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="475.0" prefWidth="700.0" text="&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, &#10;sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. &#10;Ut enim ad minim veniam, quis nostrud exercitation ullamco &#10;laboris nisi ut aliquip ex ea commodo consequat. &#10;Duis aute irure dolor in reprehenderit in voluptate velit esse cillum &#10;dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, &#10;sunt in culpa qui officia deserunt mollit anim id est laborum.&quot;" textFill="BLACK">
               <font>
                 <Font size="18.0" />
               </font>
               <opaqueInsets>
                 <Insets />
               </opaqueInsets>
-              <VBox.margin>
-                <Insets top="100.0" />
-              </VBox.margin>
+                     <VBox.margin>
+                        <Insets top="100.0" />
+                     </VBox.margin>
             </Label>
           </children></VBox>
       </center>

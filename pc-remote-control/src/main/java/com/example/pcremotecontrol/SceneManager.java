@@ -35,9 +35,6 @@ public class SceneManager {
                 if (controller instanceof MenuController) {
                     ((MenuController) controller).initMenu();
                 }
-                else if (controller instanceof GuideController) {
-                    ((GuideController) controller).initGuideController();
-                }
                 return new Scene(p);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

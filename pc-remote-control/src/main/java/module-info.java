@@ -1,8 +1,6 @@
 module com.example.pcremotecontrol {
     requires javafx.controls;
     requires javafx.fxml;
-    requires org.kordamp.ikonli.core;
-    requires org.kordamp.ikonli.javafx;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -10,6 +8,7 @@ module com.example.pcremotecontrol {
     requires java.activation;
     requires java.mail;
     requires com.github.kwhat.jnativehook;
+    requires de.jensd.fx.glyphs.fontawesome;
 
     opens com.example.pcremotecontrol to javafx.fxml;
     exports com.example.pcremotecontrol;
