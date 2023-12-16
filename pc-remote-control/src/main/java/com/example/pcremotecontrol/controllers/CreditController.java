@@ -5,5 +5,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class CreditController extends BaseController{
+    private static final String main_txt =
+            "Phần mềm sử dụng:\n" +
+                "Các thư viện Java cơ bản.\n" +
+                "Một số thư viện Java đặc biệt: javafx, javax.activation,\n\tjavax.mail, jnativehook.\n" +
+                "Sản phẩm của các thành viên:\n"+
+                    "- Huy who get his ass kick by Champion Gundyr\n" +
+                    "- Kiệt lặc\n" +
+                    "- Đức cán bộ \n" +
+                "Cảm ơn bạn vì đã sử dụng chương trình.";
 
+    @FXML
+    private Label mainTxt;
+
+    public void initCredit() {
+        mainTxt.setText(main_txt);
+    }
 }

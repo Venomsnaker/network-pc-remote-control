@@ -5,20 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8da4f787-5c1c-4c34-8bdb-d00106705b59" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/FunctionController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/function-view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/SceneManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/SceneManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/AppLibraryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/AppLibraryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/BaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/BaseController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/CreditController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/CreditController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/GuideController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/GuideController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/MailLibraryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/MailLibraryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/MenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/MenuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/app-library-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/app-library-view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/credit-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/credit-view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/guide-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/guide-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/mail-library-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/mail-library-view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/menu-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/menu-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -29,8 +25,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Class" />
+        <option value="FxmlFile" />
       </list>
     </option>
   </component>

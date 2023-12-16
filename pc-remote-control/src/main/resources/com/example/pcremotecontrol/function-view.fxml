@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pcremotecontrol.controllers.CreditController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pcremotecontrol.controllers.FunctionController">
     <children>
         <BorderPane prefHeight="600.0" prefWidth="900.0">
             <left>
@@ -29,14 +29,6 @@
                                 <Font size="18.0" />
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onFunctionButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Chức Năng" textFill="ALICEBLUE">
-                            <graphic>
-                                <FontAwesomeIconView fill="aliceblue" glyphName="WRENCH" />
-                            </graphic>
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                        </Button>
                         <Button mnemonicParsing="false" onAction="#onMailLibraryButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Mails" textFill="ALICEBLUE">
                             <graphic>
                                 <FontAwesomeIconView fill="aliceblue" glyphName="MAIL_FORWARD" />
@@ -48,6 +40,14 @@
                         <Button mnemonicParsing="false" onAction="#onAppLibraryButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Apps" textFill="ALICEBLUE">
                             <graphic>
                                 <FontAwesomeIconView fill="aliceblue" glyphName="FOLDER" />
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#onCreditButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thông Tin" textFill="ALICEBLUE">
+                            <graphic>
+                                <FontAwesomeIconView fill="aliceblue" glyphName="INFO" />
                             </graphic>
                             <font>
                                 <Font size="18.0" />
@@ -75,7 +75,7 @@
                                 <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                             </HBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="125.0" prefWidth="250.0" text="Thông Tin" textAlignment="CENTER" textFill="ALICEBLUE">
+                        <Label alignment="CENTER" prefHeight="125.0" prefWidth="250.0" text="Chức Năng" textAlignment="CENTER" textFill="ALICEBLUE">
                             <font>
                                 <Font size="18.0" />
                             </font>
@@ -88,21 +88,21 @@
                     </children>
                 </HBox>
             </top>
+
             <center>
                 <VBox style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
                     <children>
-                        <Label fx:id="mainTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="475.0" prefWidth="700.0" text="Credit View" textFill="BLACK">
-                            <font>
-                                <Font size="18.0" />
-                            </font>
-                            <opaqueInsets>
-                                <Insets />
-                            </opaqueInsets>
-                            <VBox.margin>
-                                <Insets top="100.0" />
-                            </VBox.margin>
-                        </Label>
-                    </children></VBox>
+                        <ScrollPane prefHeight="475.0">
+                            <content>
+                                <Label fx:id="mainTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" text="Function View" textFill="BLACK">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </VBox>
             </center>
         </BorderPane>
     </children>

@@ -16,6 +16,11 @@ public abstract class BaseController {
     }
 
     @FXML
+    public void onFunctionButtonClick() {
+        sceneManager.switchScene("function-view.fxml");
+    }
+
+    @FXML
     public void onMailLibraryButtonClick() {
         sceneManager.switchScene("mail-library-view.fxml");
     }
