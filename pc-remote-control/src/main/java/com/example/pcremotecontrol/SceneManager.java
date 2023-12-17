@@ -44,6 +44,9 @@ public class SceneManager {
                 else if (controller instanceof CreditController) {
                     ((CreditController) controller).initCredit();
                 }
+                else if (controller instanceof MailLibraryController) {
+                    ((MailLibraryController) controller).initMailLibrary();
+                }
                 return new Scene(p);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);

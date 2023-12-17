@@ -92,14 +92,26 @@
             <center>
                 <VBox style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
                     <children>
+                        <Label fx:id="mainTxt1" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="200.0" prefWidth="700.0" text="Function View 1" textFill="BLACK">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                     <VBox.margin>
+                        <Insets top="50.0" />
+                     </VBox.margin>
+                        </Label>
                         <ScrollPane prefHeight="475.0">
-                            <content>
-                                <Label fx:id="mainTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" text="Function View" textFill="BLACK">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                            </content>
+                        <content>
+                        <VBox prefHeight="465.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;">
+                           <children>
+                               <Label fx:id="mainTxt2" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="475.0" prefWidth="700.0" text="Function View 2" textFill="BLACK">
+                                   <font>
+                                       <Font size="18.0" />
+                                   </font>
+                               </Label>
+                           </children>
+                        </VBox>
+                        </content>
                         </ScrollPane>
                     </children>
                 </VBox>
