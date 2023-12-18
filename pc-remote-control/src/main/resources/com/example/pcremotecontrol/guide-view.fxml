@@ -21,6 +21,14 @@
                                 <Font size="18.0" />
                             </font>
                         </Button>
+                        <Button mnemonicParsing="false" onAction="#onGuideButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Hướng Dẫn" textFill="ALICEBLUE">
+                            <graphic>
+                                <FontAwesomeIconView fill="aliceblue" glyphName="PENCIL" />
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
                         <Button mnemonicParsing="false" onAction="#onFunctionButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Chức Năng" textFill="ALICEBLUE">
                             <graphic>
                                 <FontAwesomeIconView fill="aliceblue" glyphName="WRENCH" />
@@ -80,7 +88,7 @@
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="125.0" prefWidth="525.0" text="The Server Is Running" textFill="#50c878">
+                        <Label fx:id="serverStageTxt" alignment="CENTER" contentDisplay="CENTER" prefHeight="125.0" prefWidth="525.0" text="Server Stage" textFill="#FF3800">
                             <font>
                                 <Font size="18.0" />
                             </font>

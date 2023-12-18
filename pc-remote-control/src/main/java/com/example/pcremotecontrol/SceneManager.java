@@ -25,12 +25,10 @@ public class SceneManager {
 
     public void switchScene(String url) {
         Scene scene = scenes.computeIfAbsent(url, u -> {
-            System.out.println(u);
             FXMLLoader loader = new FXMLLoader(getClass().getResource(u));
             try {
                 Pane p = loader.load();
                 BaseController controller = loader.getController();
-                controller.setSceneManager(this);
                 // Mange Controllers Init
                 if (controller instanceof MenuController) {
                     ((MenuController) controller).initMenu();
@@ -47,11 +45,21 @@ public class SceneManager {
                 else if (controller instanceof MailLibraryController) {
                     ((MailLibraryController) controller).initMailLibrary();
                 }
-                return new Scene(p);
+                else if (controller instanceof AppLibraryController) {
+                    ((AppLibraryController) controller).initAppLibrary();
+                }
+                controller.setSceneManager(this);
+                Scene newScene = new Scene(p);
+                newScene.setUserData(controller);
+                return newScene;
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
         rootStage.setScene(scene);
+        BaseController controller = (BaseController) scene.getUserData();
+        if (controller != null) {
+            controller.updateServerStageUI();
+        }
     }
 }

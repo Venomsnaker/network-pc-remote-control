@@ -25,7 +25,7 @@ public class FunctionController extends BaseController{
 
             "- Tắt máy tính [shutdown-server] [thời gian delay theo s]\n" +
             "- Tắt máy tính [restart-server] [thời gian delay theo s]\n" +
-            "- Dừng lệnh tắt máy tính [cancel-server-shutdown] []";
+            "- Dừng lệnh tắt máy tính [cancel-server-shutdown] []\n";
 
     @FXML
     private Label mainTxt1;
@@ -33,8 +33,10 @@ public class FunctionController extends BaseController{
     @FXML
     private Label mainTxt2;
 
+
     public void initFunction() {
         mainTxt1.setText(main_txt1);
         mainTxt2.setText(main_txt2);
+        updateServerStageUI();
     }
 }

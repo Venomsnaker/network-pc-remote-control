@@ -1,27 +1,17 @@
 package com.example.pcremotecontrol.controllers;
 
+import com.example.pcremotecontrol.MainApplication;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MailLibraryController extends BaseController{
     static private List<String> mailSaved = new ArrayList<String>();
-    private static void addMailAddress(String mail) {
-        mailSaved.add(mail);
-    }
-
-    private static void removeMailAddress(String mail) {
-        mailSaved.remove(mail);
-    }
-
-    private static final String main_txt =
-            "Ở trên là các mails được ủy quyền.\n" +
-                "Cấu trúc: <tên người gửi> địa chỉ mail";
-
     @FXML
     private Label mainTxt;
 
@@ -31,22 +21,29 @@ public class MailLibraryController extends BaseController{
     @FXML
     private TextField mailTextField;
 
+    private static final String main_txt =
+            "Ở trên là các mails được ủy quyền.\n" +
+            "Vui lòng nhập với cấu trúc: <tên người gửi> địa chỉ mail.";
 
     public void initMailLibrary() {
         mainTxt.setText(main_txt);
+        updateServerStageUI();
+    }
+
+    private void updateUI(List<String> mailsSaved) {
+        String output = String.join("\n", mailsSaved);
+        mailListTxt.setText(output);
     }
 
     @FXML
     protected void onMailAddButtonClick() {
-        addMailAddress(mailTextField.getText());
-        String output = String.join("\n", mailSaved);
-        mailListTxt.setText(output);
+        MainApplication.getInstance().addMailAddress(mailTextField.getText());
+        updateUI(MainApplication.getInstance().getMailsLibrary());
     }
 
     @FXML
     protected void onMailRemoveButtonClick() {
-        removeMailAddress(mailTextField.getText());
-        String output = String.join("\n", mailSaved);
-        mailListTxt.setText(output);
+        MainApplication.getInstance().removeMailAddress(mailTextField.getText());
+        updateUI(MainApplication.getInstance().getMailsLibrary());
     }
 }

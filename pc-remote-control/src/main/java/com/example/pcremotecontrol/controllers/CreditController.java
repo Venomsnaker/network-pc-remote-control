@@ -1,8 +1,10 @@
 package com.example.pcremotecontrol.controllers;
 
+import com.example.pcremotecontrol.MainApplication;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 public class CreditController extends BaseController{
     private static final String main_txt =
@@ -20,5 +22,6 @@ public class CreditController extends BaseController{
 
     public void initCredit() {
         mainTxt.setText(main_txt);
+        updateServerStageUI();
     }
 }

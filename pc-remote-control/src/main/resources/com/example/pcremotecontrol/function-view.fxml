@@ -29,6 +29,14 @@
                                 <Font size="18.0" />
                             </font>
                         </Button>
+                        <Button mnemonicParsing="false" onAction="#onFunctionButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Chức Năng" textFill="ALICEBLUE">
+                            <graphic>
+                                <FontAwesomeIconView fill="aliceblue" glyphName="WRENCH" />
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Button>
                         <Button mnemonicParsing="false" onAction="#onMailLibraryButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Mails" textFill="ALICEBLUE">
                             <graphic>
                                 <FontAwesomeIconView fill="aliceblue" glyphName="MAIL_FORWARD" />
@@ -60,6 +68,7 @@
                             <font>
                                 <Font size="18.0" />
                             </font>
+
                         </Button>
                     </children>
                 </VBox>
@@ -80,7 +89,7 @@
                                 <Font size="18.0" />
                             </font>
                         </Label>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="125.0" prefWidth="525.0" text="The Server Is Running" textFill="#50c878">
+                        <Label fx:id="serverStageTxt" alignment="CENTER" contentDisplay="CENTER" prefHeight="125.0" prefWidth="525.0" text="Server Stage" textFill="#FF3800">
                             <font>
                                 <Font size="18.0" />
                             </font>
@@ -92,19 +101,19 @@
             <center>
                 <VBox style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
                     <children>
-                        <Label fx:id="mainTxt1" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="200.0" prefWidth="700.0" text="Function View 1" textFill="BLACK">
+                        <Label fx:id="mainTxt1" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="100.0" prefWidth="700.0" text="Function View 1" textFill="BLACK">
                             <font>
                                 <Font size="18.0" />
                             </font>
-                     <VBox.margin>
-                        <Insets top="50.0" />
-                     </VBox.margin>
+                            <VBox.margin>
+                                <Insets top="50.0" />
+                            </VBox.margin>
                         </Label>
-                        <ScrollPane prefHeight="475.0">
+                        <ScrollPane prefHeight="375.0">
                         <content>
-                        <VBox prefHeight="465.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;">
+                        <VBox prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;">
                            <children>
-                               <Label fx:id="mainTxt2" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="475.0" prefWidth="700.0" text="Function View 2" textFill="BLACK">
+                               <Label fx:id="mainTxt2" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="500.0" prefWidth="700.0" text="Function View 2" textFill="BLACK">
                                    <font>
                                        <Font size="18.0" />
                                    </font>
