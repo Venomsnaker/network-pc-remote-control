@@ -99,7 +99,7 @@
             </top>
 
             <center>
-                <VBox style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
+                <VBox alignment="CENTER" style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
                     <children>
                         <Label fx:id="mainTxt1" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="100.0" prefWidth="700.0" text="Function View 1" textFill="BLACK">
                             <font>

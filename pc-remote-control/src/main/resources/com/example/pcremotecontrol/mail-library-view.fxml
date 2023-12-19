@@ -117,11 +117,23 @@
                                 <Font size="18.0" />
                             </font>
                         </Label>
-
-                        <TextField fx:id="mailTextField" alignment="CENTER" prefHeight="50" promptText="Nhập Email">
-                     <font>
-                        <Font size="16.0" />
-                     </font></TextField>
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="700.0"
+                              style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
+                            <children>
+                                <TextField fx:id="mailNameTextField" alignment="CENTER" prefHeight="50" prefWidth="200.0"
+                                           promptText="Nhập tên mail">
+                                    <font>
+                                        <Font size="16.0"/>
+                                    </font>
+                                </TextField>
+                                <TextField fx:id="mailAddressTextField" alignment="CENTER" prefHeight="50"
+                                           prefWidth="500.0" promptText="Nhập địa chỉ mail">
+                                    <font>
+                                        <Font size="16.0"/>
+                                    </font>
+                                </TextField>
+                            </children>
+                        </HBox>
                         <HBox alignment="CENTER" prefHeight="125.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
                             <children>
                                 <Button mnemonicParsing="false" onAction="#onMailAddButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thêm Email" textFill="ALICEBLUE">

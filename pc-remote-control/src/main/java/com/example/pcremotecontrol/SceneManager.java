@@ -3,7 +3,6 @@ package com.example.pcremotecontrol;
 import com.example.pcremotecontrol.controllers.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -47,6 +46,9 @@ public class SceneManager {
                 }
                 else if (controller instanceof AppLibraryController) {
                     ((AppLibraryController) controller).initAppLibrary();
+                }
+                else if (controller instanceof ServerController) {
+                    ((ServerController) controller).initServer();
                 }
                 controller.setSceneManager(this);
                 Scene newScene = new Scene(p);

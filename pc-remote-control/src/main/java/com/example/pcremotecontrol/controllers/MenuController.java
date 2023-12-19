@@ -4,13 +4,12 @@ import com.example.pcremotecontrol.MainApplication;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 
 public class MenuController extends BaseController{
 
     private static final String main_txt =
             "Đây là phần mềm dùng điều khiển máy tính từ xa qua email.\n" +
-                "- Bắt Đầu/ Tắt để giao tiếp với Server.\n" +
+                "- Bắt Đầu/ Kết Thúc để giao tiếp với Server.\n" +
                 "- Truy cập Hướng Dẫn để xem cách sử dụng.\n" +
                 "- Truy cập Chức Năng để xem các lệnh.\n" +
                 "- Truy cập Thư Viện Mails để nhập các mails được cấp quyền.\n" +
@@ -34,11 +33,11 @@ public class MenuController extends BaseController{
     @FXML
     protected void onStartButtonClick() {
         if (MainApplication.getInstance().getServerFlag()) {
-            MainApplication.getInstance().setServerFlag(false);
+            MainApplication.getInstance().stopServer();
             startButton.setText("Bắt Đầu");
             updateServerStageUI();
         } else {
-            MainApplication.getInstance().setServerFlag(true);
+            MainApplication.getInstance().startServer();
             startButton.setText("Kết Thúc");
             updateServerStageUI();
         }

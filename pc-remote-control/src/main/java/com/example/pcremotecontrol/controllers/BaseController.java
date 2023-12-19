@@ -57,6 +57,9 @@ public abstract class BaseController {
     }
 
     @FXML
+    public void onServerButtonClick() {sceneManager.switchScene("server-view.fxml");}
+
+    @FXML
     public void onExitButtonClick() {
         System.exit(0);
     }

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MailLibraryController extends BaseController{
-    static private List<String> mailSaved = new ArrayList<String>();
     @FXML
     private Label mainTxt;
 
@@ -19,11 +18,14 @@ public class MailLibraryController extends BaseController{
     private Label mailListTxt;
 
     @FXML
-    private TextField mailTextField;
+    private TextField mailNameTextField;
+
+    @FXML
+    private TextField mailAddressTextField;
 
     private static final String main_txt =
             "Ở trên là các mails được ủy quyền.\n" +
-            "Vui lòng nhập với cấu trúc: <tên người gửi> địa chỉ mail.";
+            "Vui lòng nhập các mails mới ở phía dưới.";
 
     public void initMailLibrary() {
         mainTxt.setText(main_txt);
@@ -37,13 +39,19 @@ public class MailLibraryController extends BaseController{
 
     @FXML
     protected void onMailAddButtonClick() {
-        MainApplication.getInstance().addMailAddress(mailTextField.getText());
+        String ouput = mailNameTextField.getText() + " <" + mailAddressTextField.getText() + ">";
+        MainApplication.getInstance().addMailAddress(ouput);
+        mailNameTextField.setText("");
+        mailAddressTextField.setText("");
         updateUI(MainApplication.getInstance().getMailsLibrary());
     }
 
     @FXML
     protected void onMailRemoveButtonClick() {
-        MainApplication.getInstance().removeMailAddress(mailTextField.getText());
+        String ouput = mailNameTextField.getText() + "<" + mailAddressTextField.getText() + ">";
+        MainApplication.getInstance().removeMailAddress(ouput);
+        mailNameTextField.setText("");
+        mailAddressTextField.setText("");
         updateUI(MainApplication.getInstance().getMailsLibrary());
     }
 }

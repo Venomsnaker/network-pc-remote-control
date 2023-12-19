@@ -41,11 +41,15 @@ public class AppLibraryController extends BaseController{
     @FXML
     protected void onAppAddButtonClick() {
         MainApplication.getInstance().addAppAddress(appNameTextField.getText(), appAddressTextField.getText());
+        appNameTextField.setText("");
+        appAddressTextField.setText("");
         updateUI(MainApplication.getInstance().getAppsLibrary());
     }
 
     @FXML protected void onAppRemoveButtonClick() {
         MainApplication.getInstance().removeAppAddress(appNameTextField.getText());
+        appNameTextField.setText("");
+        appAddressTextField.setText("");
         updateUI(MainApplication.getInstance().getAppsLibrary());
     }
 }

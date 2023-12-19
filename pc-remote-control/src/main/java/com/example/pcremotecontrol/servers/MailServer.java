@@ -1,5 +1,7 @@
 package com.example.pcremotecontrol.servers;
 
+import com.example.pcremotecontrol.MainApplication;
+
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -14,19 +16,15 @@ import java.io.IOException;
 import java.util.*;
 
 public class MailServer {
-    static final String from = "g4.22tnt1.hcmus@gmail.com";
-    static final String password = "xpfabvasrrgbqmta";
+    static final String from = "qhuy.bui.contact@gmail.com";
+    static final String password = "tmxkdnhaahkkfkgl";
     static final String userName = from;
     static final String protocol = "imap";
     static final String host = "imap.gmail.com";
     static final String getPort = "993";
+    private static Queue<String[]> requests = new LinkedList<>();
 
-    public static Queue<String[]> requests = new LinkedList<>();
-
-    static private List<String> mailSaved = new ArrayList<String>();
-    static private Map<String, String> appsSaved = new HashMap<String, String>();
-
-    private static boolean sendMail(String[] respondContent) {
+    public static boolean sendMail(String[] respondContent) {
         Properties props = new Properties();
         // SMTP Host - TLS 587 SSL 465
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -73,16 +71,14 @@ public class MailServer {
 
             msg.setContent(multipart);
             Transport.send(msg);
-            System.out.println("Mail sent successfully!");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Fail to send the mail.");
             return false;
         }
     }
 
-    private static Properties getServerProperties() {
+    public static Properties getServerProperties() {
         Properties props = new Properties();
         props.put(String.format("mail.%s.host", protocol), host);
         props.put(String.format("mail.%s.port", protocol), getPort);
@@ -114,9 +110,10 @@ public class MailServer {
         return null;
     }
 
-    private static void downloadEmails() throws MessagingException {
+    public static Queue<String[]> downloadEmails() throws MessagingException {
         Properties props = getServerProperties();
         Session session = Session.getDefaultInstance(props);
+        Queue<String[]> requests = new LinkedList<>();;
 
         try {
             Store store = session.getStore(protocol);
@@ -143,8 +140,6 @@ public class MailServer {
                     messageContent = bodyPart.getContent().toString();
                 } else if (bodyPart.isMimeType("text/html")) {
                     messageContent = bodyPart.getContent().toString();
-                } else {
-                    System.out.println("Body Content is not available");
                 }
 
                 messageContent = messageContent.replace("\n", "").replace("\r", "");
@@ -155,38 +150,17 @@ public class MailServer {
             store.close();
         }
         catch (NoSuchProviderException ex) {
-            System.out.println("No provider for protocol " + protocol);
             ex.printStackTrace();
         }
         catch (MessagingException ex) {
-            System.out.println("Could not connect to the message store");
             ex.printStackTrace();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return requests;
     }
 
-    private static void addMailAddress(String mail) {
-        mailSaved.add(mail);
-        // Update UI
-    }
-
-    private static void removeMailAddress(String mail) {
-        mailSaved.remove(mail);
-        // Update UI
-    }
-
-    private static void addAppAddress(String appName, String appPath) {
-        appsSaved.put(appName, appPath);
-        // Update UI
-    }
-
-    private static void removeAppAddress(String appName) {
-        appsSaved.remove(appName);
-        // Update UI
-    }
-
-    private static String[] processMail(String[] tmp) {
+    public static String[] processMail(String[] tmp) {
         // Return Variables
         String to = tmp[0];
         String subjectReturn = "";
@@ -200,7 +174,7 @@ public class MailServer {
         subjectReturn = "Respond: " + subjectInput;
 
         System.out.println(to);
-        if (!(mailSaved.contains(to))) {
+        if (!(MainApplication.getInstance().getMailsLibrary().contains(to))) {
             contentReturn = "You gmail don't have the permission to control the machine.";
 
         }else if (subjectInput.equals("get-apps")) {
@@ -225,8 +199,8 @@ public class MailServer {
             contentReturn = MailServerHelpers.startApp(contentInput);
 
         }else if (subjectInput.equals("start-app-by-name")) {
-            if (appsSaved.containsKey(contentInput)) {
-                contentReturn = MailServerHelpers.startApp(appsSaved.get(contentInput));
+            if (MainApplication.getInstance().getAppsLibrary().containsKey(contentInput)) {
+                contentReturn = MailServerHelpers.startApp(MainApplication.getInstance().getAppsLibrary().get(contentInput));
             } else {
                 contentReturn = "The app you wish to start has not been set up | You have input the wrong name.";
             }
@@ -286,20 +260,6 @@ public class MailServer {
         return new String[]{to, subjectReturn, contentReturn, attachmentReturn};
     }
 
-
-    public static void main(String[] args) throws MessagingException{
-//        addMailAddress("Huy Bui <qhuy.bui.persona@gmail.com>");
-//        addAppAddress("HWiNFO64", "C:/Program Files/HWiNFO/HWiNFO64.exe");
-
-        while(true) {
-            MailServer.downloadEmails();
-            if (requests == null) continue;
-            String[] tmp = requests.poll();
-            if (tmp != null) {
-                String[] respondContent = MailServer.processMail(tmp);
-                MailServer.sendMail(respondContent);
-            }
-        }
-    }
+    public static void main(String[] args) {}
 }
 

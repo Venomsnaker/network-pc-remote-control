@@ -7,153 +7,187 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pcremotecontrol.controllers.AppLibraryController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.pcremotecontrol.controllers.AppLibraryController">
     <children>
         <BorderPane prefHeight="600.0" prefWidth="900.0">
             <left>
-                <VBox alignment="CENTER" prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #c0c0c0; -fx-border-color: #555555; -fx-border-width: 0 5 0 0;" BorderPane.alignment="CENTER">
+                <VBox alignment="CENTER" prefHeight="600.0" prefWidth="200.0"
+                      style="-fx-background-color: #c0c0c0; -fx-border-color: #555555; -fx-border-width: 0 5 0 0;"
+                      BorderPane.alignment="CENTER">
                     <children>
-                        <Button mnemonicParsing="false" onAction="#onMenuButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Trang Chủ" textFill="ALICEBLUE">
+                        <Button mnemonicParsing="false" onAction="#onMenuButtonClick" prefHeight="65.0"
+                                prefWidth="200.0" stylesheets="@styling-button.css" text="Trang Chủ"
+                                textFill="ALICEBLUE">
                             <graphic>
-                                <FontAwesomeIconView fill="ALICEBLUE" glyphName="LIST" />
+                                <FontAwesomeIconView fill="ALICEBLUE" glyphName="LIST"/>
                             </graphic>
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onGuideButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Hướng Dẫn" textFill="ALICEBLUE">
+                        <Button mnemonicParsing="false" onAction="#onGuideButtonClick" prefHeight="65.0"
+                                prefWidth="200.0" stylesheets="@styling-button.css" text="Hướng Dẫn"
+                                textFill="ALICEBLUE">
                             <graphic>
-                                <FontAwesomeIconView fill="aliceblue" glyphName="PENCIL" />
+                                <FontAwesomeIconView fill="aliceblue" glyphName="PENCIL"/>
                             </graphic>
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onFunctionButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Chức Năng" textFill="ALICEBLUE">
+                        <Button mnemonicParsing="false" onAction="#onFunctionButtonClick" prefHeight="65.0"
+                                prefWidth="200.0" stylesheets="@styling-button.css" text="Chức Năng"
+                                textFill="ALICEBLUE">
                             <graphic>
-                                <FontAwesomeIconView fill="aliceblue" glyphName="WRENCH" />
+                                <FontAwesomeIconView fill="aliceblue" glyphName="WRENCH"/>
                             </graphic>
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onMailLibraryButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Mails" textFill="ALICEBLUE">
+                        <Button mnemonicParsing="false" onAction="#onMailLibraryButtonClick" prefHeight="65.0"
+                                prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Mails"
+                                textFill="ALICEBLUE">
                             <graphic>
-                                <FontAwesomeIconView fill="aliceblue" glyphName="MAIL_FORWARD" />
+                                <FontAwesomeIconView fill="aliceblue" glyphName="MAIL_FORWARD"/>
                             </graphic>
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onAppLibraryButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Apps" textFill="ALICEBLUE">
+                        <Button mnemonicParsing="false" onAction="#onAppLibraryButtonClick" prefHeight="65.0"
+                                prefWidth="200.0" stylesheets="@styling-button.css" text="Thư Viện Apps"
+                                textFill="ALICEBLUE">
                             <graphic>
-                                <FontAwesomeIconView fill="aliceblue" glyphName="FOLDER" />
+                                <FontAwesomeIconView fill="aliceblue" glyphName="FOLDER"/>
                             </graphic>
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onCreditButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thông Tin" textFill="ALICEBLUE">
+                        <Button mnemonicParsing="false" onAction="#onCreditButtonClick" prefHeight="65.0"
+                                prefWidth="200.0" stylesheets="@styling-button.css" text="Thông Tin"
+                                textFill="ALICEBLUE">
                             <graphic>
-                                <FontAwesomeIconView fill="aliceblue" glyphName="INFO" />
+                                <FontAwesomeIconView fill="aliceblue" glyphName="INFO"/>
                             </graphic>
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="65.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thoát" textFill="ALICEBLUE">
+                        <Button mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="65.0"
+                                prefWidth="200.0" stylesheets="@styling-button.css" text="Thoát" textFill="ALICEBLUE">
                             <graphic>
-                                <FontAwesomeIconView fill="aliceblue" glyphName="CLOSE" />
+                                <FontAwesomeIconView fill="aliceblue" glyphName="CLOSE"/>
                             </graphic>
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Button>
                     </children>
                 </VBox>
             </left>
             <top>
-                <HBox prefHeight="125.0" prefWidth="900.0" style="-fx-background-color: #1A1110; -fx-border-color: #555555; -fx-border-width: 0 0 5 0;" BorderPane.alignment="CENTER">
+                <HBox prefHeight="125.0" prefWidth="900.0"
+                      style="-fx-background-color: #1A1110; -fx-border-color: #555555; -fx-border-width: 0 0 5 0;"
+                      BorderPane.alignment="CENTER">
                     <children>
                         <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@logo.png" />
+                                <Image url="@logo.png"/>
                             </image>
                             <HBox.margin>
-                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+                                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
                             </HBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="125.0" prefWidth="250.0" text="Thư Viện Apps" textAlignment="CENTER" textFill="ALICEBLUE">
+                        <Label alignment="CENTER" prefHeight="125.0" prefWidth="250.0" text="Thư Viện Apps"
+                               textAlignment="CENTER" textFill="ALICEBLUE">
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Label>
-                        <Label fx:id="serverStageTxt" alignment="CENTER" contentDisplay="CENTER" prefHeight="125.0" prefWidth="525.0" text="Server Stage" textFill="#FF3800">
+                        <Label fx:id="serverStageTxt" alignment="CENTER" contentDisplay="CENTER" prefHeight="125.0"
+                               prefWidth="525.0" text="Server Stage" textFill="#FF3800">
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Label>
                     </children>
                 </HBox>
             </top>
             <center>
-                <VBox alignment="CENTER" prefHeight="475.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
+                <VBox alignment="CENTER" prefHeight="475.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;"
+                      BorderPane.alignment="CENTER">
                     <children>
                         <ScrollPane prefHeight="150.0">
                             <content>
                                 <VBox prefHeight="150.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;">
                                     <children>
-                                        <Label fx:id="appListTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="150.0" prefWidth="700.0" textFill="BLACK">
+                                        <Label fx:id="appListTxt" alignment="TOP_CENTER" contentDisplay="CENTER"
+                                               lineSpacing="2.0" prefHeight="150.0" prefWidth="700.0" textFill="BLACK">
                                             <font>
-                                                <Font size="18.0" />
+                                                <Font size="18.0"/>
                                             </font>
                                         </Label>
                                     </children>
                                 </VBox>
                             </content>
                         </ScrollPane>
-                        <Label fx:id="mainTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="100.0" prefWidth="700.0" text="App Library View" textFill="BLACK">
+                        <Label fx:id="mainTxt" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0"
+                               prefHeight="100.0" prefWidth="700.0" text="App Library View" textFill="BLACK">
                             <font>
-                                <Font size="18.0" />
+                                <Font size="18.0"/>
                             </font>
                         </Label>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="700.0"
+                              style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
                             <children>
-                                <TextField fx:id="appNameTextField" alignment="CENTER" prefHeight="50" prefWidth="200.0" promptText="Nhập tên app">
-                           <font>
-                              <Font size="16.0" />
-                           </font></TextField>
-                                <TextField fx:id="appAddressTextField" alignment="CENTER" prefHeight="50" prefWidth="500.0" promptText="Nhập địa chỉ app">
-                           <font>
-                              <Font size="16.0" />
-                           </font></TextField>
+                                <TextField fx:id="appNameTextField" alignment="CENTER" prefHeight="50" prefWidth="200.0"
+                                           promptText="Nhập tên app">
+                                    <font>
+                                        <Font size="16.0"/>
+                                    </font>
+                                </TextField>
+                                <TextField fx:id="appAddressTextField" alignment="CENTER" prefHeight="50"
+                                           prefWidth="500.0" promptText="Nhập địa chỉ app">
+                                    <font>
+                                        <Font size="16.0"/>
+                                    </font>
+                                </TextField>
                             </children>
                         </HBox>
 
 
-                        <HBox alignment="CENTER" prefHeight="125.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
+                        <HBox alignment="CENTER" prefHeight="125.0" prefWidth="700.0"
+                              style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
                             <children>
-                                <Button mnemonicParsing="false" onAction="#onAppAddButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Thêm App" textFill="ALICEBLUE">
+                                <Button mnemonicParsing="false" onAction="#onAppAddButtonClick" prefHeight="75.0"
+                                        prefWidth="200.0" stylesheets="@styling-button.css" text="Thêm App"
+                                        textFill="ALICEBLUE">
                                     <graphic>
-                                        <FontAwesomeIconView fill="ALICEBLUE" glyphName="PLUS" />
+                                        <FontAwesomeIconView fill="ALICEBLUE" glyphName="PLUS"/>
                                     </graphic>
                                     <font>
-                                        <Font size="18.0" />
+                                        <Font size="18.0"/>
                                     </font>
                                 </Button>
-                                <Button mnemonicParsing="false" onAction="#onAppRemoveButtonClick" prefHeight="75.0" prefWidth="200.0" stylesheets="@styling-button.css" text="Xóa App" textFill="ALICEBLUE">
+                                <Button mnemonicParsing="false" onAction="#onAppRemoveButtonClick" prefHeight="75.0"
+                                        prefWidth="200.0" stylesheets="@styling-button.css" text="Xóa App"
+                                        textFill="ALICEBLUE">
                                     <graphic>
-                                        <FontAwesomeIconView fill="ALICEBLUE" glyphName="REMOVE" />
+                                        <FontAwesomeIconView fill="ALICEBLUE" glyphName="REMOVE"/>
                                     </graphic>
                                     <font>
-                                        <Font size="18.0" />
+                                        <Font size="18.0"/>
                                     </font>
                                 </Button>
                             </children>
                         </HBox>
                     </children>
                     <padding>
-                        <Insets top="50.0" />
+                        <Insets top="50.0"/>
                     </padding>
                 </VBox>
             </center>

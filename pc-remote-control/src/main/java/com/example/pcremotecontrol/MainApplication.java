@@ -1,30 +1,71 @@
 package com.example.pcremotecontrol;
 
+import com.example.pcremotecontrol.servers.MailServer;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import javax.mail.MessagingException;
+import java.util.*;
 
 public class MainApplication extends Application {
+    static private Map<String, String> appsSaved = new HashMap<>();
+    static private List<String> mailSaved = new ArrayList<>();
+    private static Queue<String[]> requests = new LinkedList<>();
     private boolean serverFlag = false;
-    static private Map<String, String> appsSaved = new HashMap<String, String>();
-    static private List<String> mailSaved = new ArrayList<String>();
-
+    private Pair<String, String> serverInfo;
     private static MainApplication instance;
+
+    public static MainApplication getInstance() {
+        return instance;
+    }
+
+    private void setServerFlag(boolean flag) {
+        serverFlag = flag;
+    }
+    public void startServer() {
+        setServerFlag(true);
+
+        new Thread(() -> {
+            while(getServerFlag()) {
+                try {
+                    requests = MailServer.downloadEmails();
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+                if (!requests.isEmpty()) {
+                    String[] tmp = requests.poll();
+                    if (tmp != null) {
+                        String[] respondContent = MailServer.processMail(tmp);
+                        MailServer.sendMail(respondContent);
+                    }
+                }
+            }
+        }).start();
+    }
+    public void stopServer() {
+        setServerFlag(false);
+    }
+    public boolean getServerFlag() {
+        return serverFlag;
+    }
+
+    public void updateServerInfo(String mail, String password) {
+        serverInfo = new Pair<>(mail, password);
+    }
+    public Pair<String, String> getServerInfo() {
+        if(serverInfo == null) {
+            serverInfo = new Pair<>("", "");
+        }
+        return serverInfo;
+    }
 
     public void addAppAddress(String appName, String appPath) {
         appsSaved.put(appName, appPath);
     }
-
     public void removeAppAddress(String appName) {
         appsSaved.remove(appName);
     }
-
     public Map<String, String> getAppsLibrary() {
         return appsSaved;
     }
@@ -32,27 +73,13 @@ public class MainApplication extends Application {
     public void addMailAddress(String mail) {
         mailSaved.add(mail);
     }
-
     public void removeMailAddress(String mail) {
         mailSaved.remove(mail);
     }
-
     public List<String> getMailsLibrary() {return mailSaved;}
 
-    public static MainApplication getInstance() {
-        return instance;
-    }
-
-    public void setServerFlag(boolean flag) {
-        serverFlag = flag;
-    }
-
-    public boolean getServerFlag() {
-        return serverFlag;
-    }
-
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) {
         SceneManager sceneManager = new SceneManager(stage);
         sceneManager.switchScene("menu-view.fxml");
         stage.setTitle("PC Remote Control");

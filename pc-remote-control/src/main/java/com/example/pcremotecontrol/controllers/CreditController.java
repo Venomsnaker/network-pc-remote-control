@@ -12,9 +12,9 @@ public class CreditController extends BaseController{
                 "Các thư viện Java cơ bản.\n" +
                 "Một số thư viện Java đặc biệt: javafx, javax.activation,\n\tjavax.mail, jnativehook.\n" +
                 "Sản phẩm của các thành viên:\n"+
-                    "- Huy who get his ass kick by Champion Gundyr\n" +
-                    "- Kiệt lặc\n" +
-                    "- Đức cán bộ \n" +
+                    "- 22120068 - Nguyễn Anh Đức\n" +
+                    "- 22120128 - Bùi Quốc Huy\n" +
+                    "- 22120177 - Văn Tuấn Kiệt\n" +
                 "Cảm ơn bạn vì đã sử dụng chương trình.";
 
     @FXML
