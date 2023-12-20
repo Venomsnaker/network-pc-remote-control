@@ -288,8 +288,6 @@ public class MailServer {
 
 
     public static void main(String[] args) throws MessagingException{
-//        addMailAddress("Huy Bui <qhuy.bui.persona@gmail.com>");
-//        addAppAddress("HWiNFO64", "C:/Program Files/HWiNFO/HWiNFO64.exe");
 
         while(true) {
             MailServer.downloadEmails();

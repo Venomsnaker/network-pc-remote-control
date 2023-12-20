@@ -24,7 +24,7 @@ public class MailLibraryController extends BaseController{
     private TextField mailAddressTextField;
 
     private static final String main_txt =
-            "Ở trên là các mails được ủy quyền.\n" +
+        "Ở trên là các mails được ủy quyền.\n" +
             "Vui lòng nhập các mails mới ở phía dưới.";
 
     public void initMailLibrary() {

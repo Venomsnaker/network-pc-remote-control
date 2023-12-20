@@ -24,8 +24,8 @@ public class AppLibraryController extends BaseController{
     private TextField appAddressTextField;
 
     private static final String main_txt =
-            "Ở trên là các apps được thiết lập từ trước.\n" +
-                    "Vui lòng nhập các apps mới phía dưới.";
+        "Ở trên là các apps được thiết lập từ trước.\n" +
+            "Vui lòng nhập các apps mới phía dưới.";
 
     public void initAppLibrary() {
         mainTxt.setText(main_txt);

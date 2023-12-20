@@ -41,14 +41,14 @@ public class SceneManager {
                 else if (controller instanceof CreditController) {
                     ((CreditController) controller).initCredit();
                 }
+                else if (controller instanceof ServerController) {
+                    ((ServerController) controller).initServer();
+                }
                 else if (controller instanceof MailLibraryController) {
                     ((MailLibraryController) controller).initMailLibrary();
                 }
                 else if (controller instanceof AppLibraryController) {
                     ((AppLibraryController) controller).initAppLibrary();
-                }
-                else if (controller instanceof ServerController) {
-                    ((ServerController) controller).initServer();
                 }
                 controller.setSceneManager(this);
                 Scene newScene = new Scene(p);

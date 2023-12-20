@@ -13,6 +13,9 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import javax.mail.search.SearchTerm;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class MailServer {
@@ -33,6 +36,8 @@ public class MailServer {
         String content = respondContent[2];
         String attachment_path = respondContent[3];
         String attachment_name = respondContent[4];
+        String attachment_html = respondContent[5];
+
 
         Authenticator auth = new Authenticator() {
             @Override
@@ -54,9 +59,16 @@ public class MailServer {
 
             // Body
             BodyPart msgText = new MimeBodyPart();
-            msgText.setText(content);
             Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(msgText);
+
+            if (!attachment_html.isEmpty()) {
+                String htmlContent = new String(Files.readAllBytes(Paths.get(attachment_html)), StandardCharsets.UTF_8);
+                msgText.setContent(htmlContent, "text/html; charset=UTF-8");
+                multipart.addBodyPart(msgText);
+            } else {
+                msgText.setText(content);
+                multipart.addBodyPart(msgText);
+            }
 
             if (!attachment_path.isEmpty()) {
                 BodyPart msgAttachment = new MimeBodyPart();
@@ -65,7 +77,6 @@ public class MailServer {
                 msgAttachment.setFileName(attachment_name);
                 multipart.addBodyPart(msgAttachment);
             }
-
             msg.setContent(multipart);
             Transport.send(msg);
             return true;
@@ -164,6 +175,7 @@ public class MailServer {
         String contentReturn = "";
         String attachmentReturn = "";
         String attachmentName = "empty";
+        String attachmentHTML = "";
 
         // Input Variables
         String subjectInput = tmp[1];
@@ -269,32 +281,11 @@ public class MailServer {
                 }
 
         }else {
-            contentReturn = "You have input the wrong command!\n" + " Here is the list of command you can try:\n" +
-                    "- Nhận danh sách Apps: [get-apps] []\n" +
-                    "- Khởi động Apps: [start-app] [địa chỉ file exe]\n" +
-                    "- Khởi động Apps lưu sẵn: [start-app-by-name] [tên app]\n" +
-                    "- Tắt Apps: [stop-app] [tên app]\n\n" +
-
-                    "- Nhận danh sách Services: [get-services] []\n" +
-                    "- Khởi động Service: [start-service] [tên service]\n" +
-                    "- Tắt Service: [stop-service] [tên service]\n\n"+
-
-                    "- Lấy Screenshot: [get-screenshot] []\n" +
-                    "- Khởi động Keylogger: [start-keylogger] []\n" +
-                    "- Tắt Keylogger: [stop-keylogger] []\n\n" +
-
-                    "- Lấy File: [collect-file] [địa chỉ file]\n" +
-                    "- In ra thư mục [get-directory] [địa chỉ folder]\n\n" +
-
-                    "- Tắt phần mềm: [logout-server] []\n"+
-                    "- Tắt máy tính: [shutdown-server] [thời gian delay theo s]\n" +
-                    "- Khởi động lại máy tính: [restart-server] [thời gian delay theo s]\n" +
-                    "- Dừng lệnh tắt máy tính: [cancel-shutdown] []\n\n"+
-
-                    "- Xem các chức năng: [help/ nhập bất kì] []\n";
+            contentReturn = "Here is the list of command you can try:";
+            attachmentHTML = "src/main/resources/com/example/pcremotecontrol/index.html";
         }
 
-        return new String[]{to, subjectReturn, contentReturn, attachmentReturn, attachmentName};
+        return new String[]{to, subjectReturn, contentReturn, attachmentReturn, attachmentName, attachmentHTML};
     }
 
     public static void main(String[] args) {}

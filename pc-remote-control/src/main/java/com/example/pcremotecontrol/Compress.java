@@ -1,8 +1,6 @@
+package com.example.pcremotecontrol;
+
 import java.io.*;
-import java.nio.file.Paths;
-import java.util.zip.*;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
