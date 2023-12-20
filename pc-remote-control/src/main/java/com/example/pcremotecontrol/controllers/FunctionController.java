@@ -18,14 +18,19 @@ public class FunctionController extends BaseController{
             "- Khởi động Service: [start-service] [tên service]\n" +
             "- Tắt Service: [stop-service] [tên service]\n\n"+
 
-            "- Lấy File: [collect-file] [địa chỉ file]\n" +
             "- Lấy Screenshot: [get-screenshot] []\n" +
             "- Khởi động Keylogger: [start-keylogger] []\n" +
             "- Tắt Keylogger: [stop-keylogger] []\n\n" +
 
+            "- Lấy File: [collect-file] [địa chỉ file]\n" +
+            "- In ra thư mục [get-directory] [địa chỉ folderl]\n\n" +
+
+            "- Tắt phần mềm: [logout-server] []\n"+
             "- Tắt máy tính: [shutdown-server] [thời gian delay theo s]\n" +
-            "- Tắt máy tính: [restart-server] [thời gian delay theo s]\n" +
-            "- Dừng lệnh tắt máy tính: [cancel-server-shutdown] []\n";
+            "- Khởi động lại máy tính: [restart-server] [thời gian delay theo s]\n" +
+            "- Dừng lệnh tắt máy tính: [cancel-shutdown] []\n\n"+
+
+            "- Xem các chức năng: [help/ nhập bất kì] []\n";
 
     @FXML
     private Label mainTxt1;

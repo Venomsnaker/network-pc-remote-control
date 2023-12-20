@@ -30,10 +30,12 @@ public class ServerController extends BaseController{
 
     @FXML
     protected void onServerChangeButtonClick() {
-        MainApplication.getInstance().updateServerInfo(mailAddressTextField.getText(), mailPasswordTextField.getText());
-        mailAddressTextField.setText("");
-        mailPasswordTextField.setText("");
-        updateUI();
+        if (!mailAddressTextField.getText().isEmpty() && !mailPasswordTextField.getText().isEmpty()) {
+            MainApplication.getInstance().updateServerInfo(mailAddressTextField.getText(), mailPasswordTextField.getText());
+            mailAddressTextField.setText("");
+            mailPasswordTextField.setText("");
+            updateUI();
+        }
     }
 
     private void updateUI() {

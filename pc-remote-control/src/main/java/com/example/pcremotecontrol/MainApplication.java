@@ -13,7 +13,7 @@ public class MainApplication extends Application {
     static private List<String> mailSaved = new ArrayList<>();
     private static Queue<String[]> requests = new LinkedList<>();
     private boolean serverFlag = false;
-    private Pair<String, String> serverInfo;
+    private Pair<String, String> serverInfo = new Pair<>("g4.22tnt1.hcmus@gmail.com", "xpfabvasrrgbqmta");
     private static MainApplication instance;
 
     public static MainApplication getInstance() {
@@ -54,9 +54,6 @@ public class MainApplication extends Application {
         serverInfo = new Pair<>(mail, password);
     }
     public Pair<String, String> getServerInfo() {
-        if(serverInfo == null) {
-            serverInfo = new Pair<>("", "");
-        }
         return serverInfo;
     }
 
