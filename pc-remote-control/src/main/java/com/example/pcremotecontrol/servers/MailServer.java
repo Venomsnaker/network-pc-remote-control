@@ -36,7 +36,6 @@ public class MailServer {
         String content = respondContent[2];
         String attachment_path = respondContent[3];
         String attachment_name = respondContent[4];
-        String attachment_html = respondContent[5];
 
 
         Authenticator auth = new Authenticator() {
@@ -60,15 +59,8 @@ public class MailServer {
             // Body
             BodyPart msgText = new MimeBodyPart();
             Multipart multipart = new MimeMultipart();
-
-            if (!attachment_html.isEmpty()) {
-                String htmlContent = new String(Files.readAllBytes(Paths.get(attachment_html)), StandardCharsets.UTF_8);
-                msgText.setContent(htmlContent, "text/html; charset=UTF-8");
-                multipart.addBodyPart(msgText);
-            } else {
-                msgText.setText(content);
-                multipart.addBodyPart(msgText);
-            }
+            msgText.setText(content);
+            multipart.addBodyPart(msgText);
 
             if (!attachment_path.isEmpty()) {
                 BodyPart msgAttachment = new MimeBodyPart();
@@ -168,14 +160,13 @@ public class MailServer {
         return requests;
     }
 
-    public static String[] processMail(String[] tmp) {
+    public static String[] processMail(String[] tmp) throws IOException {
         // Return Variables
         String to = tmp[0];
         String subjectReturn = "";
         String contentReturn = "";
         String attachmentReturn = "";
         String attachmentName = "empty";
-        String attachmentHTML = "";
 
         // Input Variables
         String subjectInput = tmp[1];
@@ -183,8 +174,8 @@ public class MailServer {
 
         subjectReturn = "Respond: " + subjectInput;
 
-        System.out.println(to);
-        if (!(MainApplication.getInstance().getMailsLibrary().contains(to))) {
+        String to_mail = to.substring(to.lastIndexOf("<") + 1, to.indexOf(">"));
+        if (!(MainApplication.getInstance().getMailsLibrary().contains(to_mail))) {
             contentReturn = "You gmail don't have the permission to control the machine.";
 
         }else if (subjectInput.equals("get-apps")) {
@@ -245,7 +236,7 @@ public class MailServer {
         }else if (subjectInput.equals("cancel-shutdown")) {
             contentReturn = MailServerHelpers.cancelServerShutdown();
 
-        }else if (subjectInput.equals("logout-app")) {
+        }else if (subjectInput.equals("logout-server")) {
             MailServerHelpers.logoutServer();
 
         }else if (subjectInput.equals("start-keylogger")) {
@@ -281,11 +272,12 @@ public class MailServer {
                 }
 
         }else {
+            attachmentReturn = MailServerHelpers.getFunctionsImage();
+            attachmentName = "guide";
             contentReturn = "Here is the list of command you can try:";
-            attachmentHTML = "src/main/resources/com/example/pcremotecontrol/index.html";
         }
 
-        return new String[]{to, subjectReturn, contentReturn, attachmentReturn, attachmentName, attachmentHTML};
+        return new String[]{to, subjectReturn, contentReturn, attachmentReturn, attachmentName};
     }
 
     public static void main(String[] args) {}

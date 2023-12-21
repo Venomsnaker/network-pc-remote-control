@@ -18,9 +18,6 @@ public class MailLibraryController extends BaseController{
     private Label mailListTxt;
 
     @FXML
-    private TextField mailNameTextField;
-
-    @FXML
     private TextField mailAddressTextField;
 
     private static final String main_txt =
@@ -39,18 +36,14 @@ public class MailLibraryController extends BaseController{
 
     @FXML
     protected void onMailAddButtonClick() {
-        String ouput = mailNameTextField.getText() + " <" + mailAddressTextField.getText() + ">";
-        MainApplication.getInstance().addMailAddress(ouput);
-        mailNameTextField.setText("");
+        MainApplication.getInstance().addMailAddress(mailAddressTextField.getText());
         mailAddressTextField.setText("");
         updateUI(MainApplication.getInstance().getMailsLibrary());
     }
 
     @FXML
     protected void onMailRemoveButtonClick() {
-        String ouput = mailNameTextField.getText() + "<" + mailAddressTextField.getText() + ">";
-        MainApplication.getInstance().removeMailAddress(ouput);
-        mailNameTextField.setText("");
+        MainApplication.getInstance().removeMailAddress(mailAddressTextField.getText());
         mailAddressTextField.setText("");
         updateUI(MainApplication.getInstance().getMailsLibrary());
     }

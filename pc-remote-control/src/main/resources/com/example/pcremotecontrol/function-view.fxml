@@ -113,11 +113,11 @@
                         <content>
                         <VBox prefHeight="650.0" prefWidth="700.0" style="-fx-background-color: #e5e4e2;">
                            <children>
-                               <Label fx:id="mainTxt2" alignment="TOP_CENTER" contentDisplay="CENTER" lineSpacing="2.0" prefHeight="650.0" prefWidth="700.0" text="Function View 2" textFill="BLACK">
-                                   <font>
-                                       <Font size="18.0" />
-                                   </font>
-                               </Label>
+                              <ImageView fitHeight="2000.0" fitWidth="680.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@functions.jpg" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </VBox>
                         </content>

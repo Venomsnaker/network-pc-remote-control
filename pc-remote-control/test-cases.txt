@@ -1,0 +1,33 @@
+Thiết lập server để chạy như server
+Tải jdk 19
+Mở cmd duoi quyen admin r start file jar 
+
+Thêm mail user để test
+Add app để start by name
+	HW - Ex: C:\Program Files\HWiNFO\HWiNFO64.exe
+
+Các lệnh:
+help/ nhập sai lệnh
+get-apps
+start-app
+	C:\Program Files\UniKeyNT\UniKeyNT.exe
+start-app-by-name
+	HW
+stop-app
+	HWiNFO64
+get-services
+start-service
+	MySQL82
+stop-service
+	MySQL82
+get-screenshot
+start-keylogger
+stop-keylogger
+collect-file
+	C:\Users\ADMIN\Pictures\Wallpaper.png
+get-directory
+	D:\
+shutdown-server
+	900
+cancel-shutdown
+logout-server

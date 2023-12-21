@@ -120,14 +120,8 @@
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="700.0"
                               style="-fx-background-color: #e5e4e2;" BorderPane.alignment="CENTER">
                             <children>
-                                <TextField fx:id="mailNameTextField" alignment="CENTER" prefHeight="50" prefWidth="200.0"
-                                           promptText="Nhập tên mail">
-                                    <font>
-                                        <Font size="16.0"/>
-                                    </font>
-                                </TextField>
                                 <TextField fx:id="mailAddressTextField" alignment="CENTER" prefHeight="50"
-                                           prefWidth="500.0" promptText="Nhập địa chỉ mail">
+                                           prefWidth="700.0" promptText="Nhập địa chỉ mail">
                                     <font>
                                         <Font size="16.0"/>
                                     </font>
