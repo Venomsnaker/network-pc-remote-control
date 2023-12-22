@@ -41,14 +41,12 @@ public class MailServerHelpers {
         List<String> services = new ArrayList<>();
         try {
             // Get services
-            Process p = Runtime.getRuntime().exec("sc query type= service state= all");
+            Process p = Runtime.getRuntime().exec("wmic service get name, displayname, state");
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("DISPLAY_NAME:")) {
-                    services.add(line.substring(14).trim());
-                }
+                services.add(line);
             }
             reader.close();
 
@@ -93,7 +91,7 @@ public class MailServerHelpers {
 
     public static String startService(String serviceName) {
         try {
-            Process p = Runtime.getRuntime().exec("net start " + serviceName);
+            Process p = Runtime.getRuntime().exec("NET START " + serviceName);
             int exitCode = p.waitFor();
             if (exitCode == 0) {
                 return "Successfully start: " + serviceName;
@@ -108,7 +106,7 @@ public class MailServerHelpers {
 
     public static String stopService(String serviceName) {
         try {
-            Process p = Runtime.getRuntime().exec("net stop " + serviceName);
+            Process p = Runtime.getRuntime().exec("NET STOP " + serviceName);
             int exitCode = p.waitFor();
             if (exitCode == 0) {
                 return "Successfully stop: " + serviceName;

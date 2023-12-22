@@ -10,36 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8da4f787-5c1c-4c34-8bdb-d00106705b59" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../packages/JNativeHook-2.2.2.x86_64.dll" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/logo.ai" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/screenshot.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/MainApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/FunctionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/FunctionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/MailLibraryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/controllers/MailLibraryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/servers/MailServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/servers/MailServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/servers/MailServerHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pcremotecontrol/servers/MailServerHelpers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/function-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/function-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/mail-library-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/pcremotecontrol/mail-library-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../readme.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/remote-control.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/ClientUI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/Email.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/MailServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/MailServerHelpers.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/MailServerKeylogger.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../remote-control/src/help.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
